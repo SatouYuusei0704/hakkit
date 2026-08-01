@@ -17,6 +17,7 @@ export default function AchievementList() {
   }, []);
 
   const summary = summarizeAchievements(records);
+  console.log("[動作確認用] summary.badges:", summary.badges); // TODO: 確認後に削除する
 
   return (
     <div className={styles.container}>
