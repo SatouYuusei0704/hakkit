@@ -1,26 +1,37 @@
 import { NextResponse } from "next/server";
 import { missions as defaultMissions } from "@/data/missions";
-import { GachaResult, Rarity } from "@/types/mission";
+import { GachaResult, Mission, Rarity } from "@/types/mission";
 import { isMission } from "@/lib/storage";
 
-// TODO(バックエンド担当A): 排出率を調整してください（合計が100になるようにする）
 const RARITY_WEIGHTS: Record<Rarity, number> = {
   N: 70,
-  R: 20,
+  R: 22,
   SR: 8,
-  SSR: 2,
 };
 
 function pickRarity(): Rarity {
   const roll = Math.random() * 100;
   let cumulative = 0;
-  for (const [rarity, weight] of Object.entries(RARITY_WEIGHTS) as [Rarity, number][]) {
+
+  for (const [rarity, weight] of Object.entries(RARITY_WEIGHTS) as [
+    Rarity,
+    number
+  ][]) {
     cumulative += weight;
-    if (roll <= cumulative) {
+    if (roll < cumulative) {
       return rarity;
     }
   }
+
   return "N";
+}
+
+function pickMissionByRarity(rarity: Rarity, pool: Mission[]): Mission {
+  const candidates = pool.filter((mission) => mission.rarity === rarity);
+  if (candidates.length > 0) {
+    return candidates[Math.floor(Math.random() * candidates.length)];
+  }
+  return pool[Math.floor(Math.random() * pool.length)];
 }
 
 export async function POST(request: Request) {
@@ -34,12 +45,13 @@ export async function POST(request: Request) {
   const missions = requestedMissions.length > 0 ? requestedMissions : defaultMissions;
 
   const rarity = pickRarity();
-  const candidates = missions.filter((m) => m.rarity === rarity);
+  const mission = pickMissionByRarity(rarity, missions);
 
-  // 該当レアリティのミッションが無い場合は全体からフォールバック
-  const pool = candidates.length > 0 ? candidates : missions;
-  const mission = pool[Math.floor(Math.random() * pool.length)];
+  const result: GachaResult = {
+    rarity,
+    mission,
+    timestamp: Date.now(),
+  };
 
-  const result: GachaResult = { mission };
   return NextResponse.json(result);
 }

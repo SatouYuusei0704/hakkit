@@ -8,7 +8,7 @@ export type AchievementSummary = {
 
 // TODO(バックエンド担当B): streak計算やバッジ判定などをここに実装してください
 export function summarizeAchievements(records: AchievementRecord[]): AchievementSummary {
-  const byRarity: Record<Rarity, number> = { N: 0, R: 0, SR: 0, SSR: 0 };
+  const byRarity: Record<Rarity, number> = { N: 0, R: 0, SR: 0 };
   for (const record of records) {
     byRarity[record.rarity] += 1;
   }

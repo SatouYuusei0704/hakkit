@@ -3,7 +3,7 @@ import { missions as defaultMissions } from "@/data/missions";
 
 const STORAGE_KEY = "hakkit:achievements";
 const MISSIONS_STORAGE_KEY = "hakkit:custom-missions";
-const RARITIES: Rarity[] = ["N", "R", "SR", "SSR"];
+const RARITIES: Rarity[] = ["N", "R", "SR"];
 
 export function isMission(value: unknown): value is Mission {
   if (typeof value !== "object" || value === null) return false;

@@ -7,7 +7,7 @@ import { loadMissions, saveMissions, resetMissions } from "@/lib/storage";
 import pageStyles from "../../page.module.css";
 import styles from "./page.module.css";
 
-const RARITIES: Rarity[] = ["N", "R", "SR", "SSR"];
+const RARITIES: Rarity[] = ["N", "R", "SR"];
 
 export default function EditMissionsPage() {
   const [missions, setMissions] = useState<Mission[]>([]);
