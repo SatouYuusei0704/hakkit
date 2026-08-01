@@ -1,0 +1,51 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  max-width: 480px;
+}
+
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 16px;
+  border-radius: 12px;
+  background: #f4f4f5;
+}
+
+.list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 0;
+  margin: 0;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: #fafafa;
+  font-size: 0.9rem;
+}
+
+.rarity {
+  font-weight: 700;
+  min-width: 2.5em;
+}
+
+.date {
+  margin-left: auto;
+  color: #888;
+  font-size: 0.8rem;
+}
+
+.empty {
+  color: #888;
+  text-align: center;
+}
