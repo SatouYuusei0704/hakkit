@@ -30,33 +30,112 @@
   padding: 8px;
   list-style: none;
   border-radius: 8px;
-  background: #fff;
+  background: #ffffff;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
-.menu li a {
+.menuAction {
   display: block;
-  padding: 8px 12px;
-  border-radius: 6px;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  background: #f8f8f8;
   color: #171717;
+  font: inherit;
   font-size: 0.9rem;
+  font-weight: 600;
+  text-align: left;
   text-decoration: none;
+  cursor: pointer;
+  box-sizing: border-box;
 }
 
-.menu li a:hover {
-  background: #f0f0f0;
+.menuAction:hover {
+  opacity: 0.9;
+}
+
+.confirmOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.confirmModal {
+  width: min(100%, 320px);
+  padding: 24px 20px;
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+
+.confirmTitle {
+  margin: 0 0 20px;
+  color: #171717;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.confirmActions {
+  display: flex;
+  gap: 10px;
+}
+
+.confirmCancelButton,
+.confirmConfirmButton {
+  flex: 1;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.confirmCancelButton {
+  background: #f1f1f1;
+  color: #171717;
+}
+
+.confirmConfirmButton {
+  background: #171717;
+  color: #ffffff;
 }
 
 @media (prefers-color-scheme: dark) {
   .menu {
+    background: #f7f7f7;
+  }
+
+  .menuAction {
+    background: #ffffff;
+    color: #171717;
+    border-color: #d9d9d9;
+  }
+
+  .confirmModal {
     background: #171717;
   }
 
-  .menu li a {
-    color: #ededed;
+  .confirmTitle {
+    color: #f7f7f7;
   }
 
-  .menu li a:hover {
-    background: #262626;
+  .confirmCancelButton {
+    background: #2b2b2b;
+    color: #f7f7f7;
+  }
+
+  .confirmConfirmButton {
+    background: #ffffff;
+    color: #171717;
   }
 }
