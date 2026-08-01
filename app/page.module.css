@@ -1,7 +1,5 @@
 .page {
-  --background: #fafafa;
-  --foreground: #fff;
-  --text-primary: #000;
+  --text-primary: #333333;
 
   display: flex;
   flex: 1;
@@ -10,7 +8,7 @@
   align-items: center;
   justify-content: center;
   font-family: var(--font-geist-sans);
-  background-color: var(--background);
+  background: linear-gradient(180deg, var(--gacha-bg-top) 0%, var(--gacha-bg-bottom) 100%);
 }
 
 .main {
@@ -24,10 +22,54 @@
   color: var(--text-primary);
 }
 
-@media (prefers-color-scheme: dark) {
-  .page {
-    --background: #000;
-    --foreground: #000;
-    --text-primary: #ededed;
+.main h1 {
+  font-size: 1.5rem;
+  font-weight: 800;
+  text-align: center;
+  letter-spacing: 0.02em;
+}
+
+.completeButton {
+  padding: 10px 32px;
+  min-height: 44px;
+  border-radius: 999px;
+  border: 1px solid #9fc9dd;
+  background: transparent;
+  color: #4a7a93;
+  font-size: 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.completeButton:hover:not(:disabled) {
+  background: #f0f8fc;
+}
+
+.completeButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.achievementsLink {
+  color: #4a7a93;
+  font-size: 0.9rem;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+@media (max-width: 400px) {
+  .main {
+    padding: 32px 16px;
+    gap: 20px;
+  }
+}
+
+@media (min-width: 768px) {
+  .main {
+    max-width: 640px;
+  }
+
+  .main h1 {
+    font-size: 1.9rem;
   }
 }

@@ -5,7 +5,6 @@ type Props = {
   mission: Mission | null;
 };
 
-// TODO(フロント担当): レアリティごとの見た目やアイコンを充実させてください
 export default function MissionCard({ mission }: Props) {
   if (!mission) {
     return (
@@ -17,6 +16,7 @@ export default function MissionCard({ mission }: Props) {
 
   return (
     <div className={styles.card} data-rarity={mission.rarity}>
+      <span className={styles.capsuleIcon} aria-hidden="true" />
       <span className={styles.rarity}>{mission.rarity}</span>
       <p className={styles.text}>{mission.text}</p>
     </div>
