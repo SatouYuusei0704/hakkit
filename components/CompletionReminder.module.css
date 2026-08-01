@@ -1,0 +1,16 @@
+.banner {
+  width: 100%;
+  padding: 12px 16px;
+  border-radius: 8px;
+  background: #fff4e5;
+  color: #7a4a00;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+@media (prefers-color-scheme: dark) {
+  .banner {
+    background: #3a2e10;
+    color: #ffd58a;
+  }
+}

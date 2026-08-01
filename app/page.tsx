@@ -8,6 +8,7 @@ import GachaButton from "@/components/GachaButton";
 import MissionCard from "@/components/MissionCard";
 import RarityEffect from "@/components/RarityEffect";
 import HamburgerMenu from "@/components/HamburgerMenu";
+import CompletionReminder from "@/components/CompletionReminder";
 import styles from "./page.module.css";
 
 export default function Home() {
@@ -36,6 +37,7 @@ export default function Home() {
       <HamburgerMenu />
       <main className={styles.main}>
         <h1>マンネリ突破ガチャ</h1>
+        <CompletionReminder missionId={mission?.id ?? null} completed={completed} />
         <RarityEffect rarity={mission?.rarity ?? null}>
           <MissionCard mission={mission} />
         </RarityEffect>
