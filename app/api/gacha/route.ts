@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { missions } from "@/data/missions";
+import { missions as defaultMissions } from "@/data/missions";
 import { GachaResult, Rarity } from "@/types/mission";
+import { isMission } from "@/lib/storage";
 
 // TODO(バックエンド担当A): 排出率を調整してください（合計が100になるようにする）
 const RARITY_WEIGHTS: Record<Rarity, number> = {
@@ -22,7 +23,16 @@ function pickRarity(): Rarity {
   return "N";
 }
 
-export async function POST() {
+export async function POST(request: Request) {
+  const body: unknown = await request.json().catch(() => null);
+  const requestedMissions =
+    body !== null && typeof body === "object" && Array.isArray((body as { missions?: unknown }).missions)
+      ? (body as { missions: unknown[] }).missions.filter(isMission)
+      : [];
+
+  // クライアントから有効なカスタムミッションが送られてきた場合はそちらを使う
+  const missions = requestedMissions.length > 0 ? requestedMissions : defaultMissions;
+
   const rarity = pickRarity();
   const candidates = missions.filter((m) => m.rarity === rarity);
 

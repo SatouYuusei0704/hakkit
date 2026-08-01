@@ -7,6 +7,7 @@ import { saveAchievement } from "@/lib/storage";
 import GachaButton from "@/components/GachaButton";
 import MissionCard from "@/components/MissionCard";
 import RarityEffect from "@/components/RarityEffect";
+import HamburgerMenu from "@/components/HamburgerMenu";
 import styles from "./page.module.css";
 
 export default function Home() {
@@ -32,6 +33,7 @@ export default function Home() {
 
   return (
     <div className={styles.page}>
+      <HamburgerMenu />
       <main className={styles.main}>
         <h1>マンネリ突破ガチャ</h1>
         <RarityEffect rarity={mission?.rarity ?? null}>

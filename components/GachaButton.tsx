@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Mission } from "@/types/mission";
+import { loadMissions } from "@/lib/storage";
 import styles from "./GachaButton.module.css";
 
 type Props = {
@@ -14,7 +15,11 @@ export default function GachaButton({ onResult }: Props) {
   async function handleClick() {
     setLoading(true);
     try {
-      const res = await fetch("/api/gacha", { method: "POST" });
+      const res = await fetch("/api/gacha", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ missions: loadMissions() }),
+      });
       const data = await res.json();
       onResult(data.mission as Mission);
     } finally {
