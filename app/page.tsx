@@ -6,7 +6,6 @@ import { Mission } from "@/types/mission";
 import { saveAchievement } from "@/lib/storage";
 import GachaButton from "@/components/GachaButton";
 import MissionCard from "@/components/MissionCard";
-import RarityEffect from "@/components/RarityEffect";
 import HamburgerMenu from "@/components/HamburgerMenu";
 import styles from "./page.module.css";
 

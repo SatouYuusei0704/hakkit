@@ -41,21 +41,14 @@ export default function GachaButton({ mission, onResult }: Props) {
       setDismissing(false);
       setDisplayMission(null);
     }
-    try {
-      const res = await fetch("/api/gacha", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ missions: loadMissions() }),
-      });
-      const data = await res.json();
-      onResult(data.mission as Mission);
-    } finally {
-      setLoading(false);
-    }
 
     setRollIndex((i) => i + 1);
 
-    const fetchPromise = fetch("/api/gacha", { method: "POST" }).then((res) => res.json());
+    const fetchPromise = fetch("/api/gacha", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ missions: loadMissions() }),
+    }).then((res) => res.json());
     const revealTimer = new Promise<void>((resolve) => setTimeout(resolve, REVEAL_MS));
     const [data] = await Promise.all([fetchPromise, revealTimer]);
 
