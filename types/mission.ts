@@ -1,5 +1,5 @@
 // レアリティ: ガチャの排出率に対応する
-export type Rarity = "N" | "R" | "SR" | "SSR";
+export type Rarity = "N" | "R" | "SR";
 
 export type Mission = {
   id: string;
@@ -10,6 +10,8 @@ export type Mission = {
 // ガチャを引いた結果としてAPIが返す型
 export type GachaResult = {
   mission: Mission;
+  rarity: Rarity;
+  timestamp: number;
 };
 
 // 端末に保存する達成履歴1件分

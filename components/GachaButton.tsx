@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Mission, Rarity } from "@/types/mission";
 import MissionCard from "@/components/MissionCard";
 import RarityEffect from "@/components/RarityEffect";
+import { loadMissions } from "@/lib/storage";
 import styles from "./GachaButton.module.css";
 
 type Props = {
@@ -39,6 +40,17 @@ export default function GachaButton({ mission, onResult }: Props) {
       await new Promise((resolve) => setTimeout(resolve, DISMISS_MS));
       setDismissing(false);
       setDisplayMission(null);
+    }
+    try {
+      const res = await fetch("/api/gacha", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ missions: loadMissions() }),
+      });
+      const data = await res.json();
+      onResult(data.mission as Mission);
+    } finally {
+      setLoading(false);
     }
 
     setRollIndex((i) => i + 1);
