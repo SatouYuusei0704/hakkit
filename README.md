@@ -1,36 +1,92 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Gachaly
 
-## Getting Started
+## チーム名
 
-First, run the development server:
+pushで寝る
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## プロダクト名
+
+Gachaly
+
+## 概要
+
+Gachalyは、「何をすればいいか分からない」という日常のちょっとした停滞感を、ワンクリックのガチャで突破するWebアプリです。ボタンを押すとレアリティ付きの小さなミッションが1つ提示され、それに挑戦して完了ボタンを押すだけで実績として記録されます。特に時間に余裕のある夏休み期間の大学生をターゲットに、「何もしなかった一日」を「何かをした一日」に変える最初の一歩を後押しします。
+
+## デモ
+
+- 発表資料URL：[未定]
+- デモURL：[未定]
+- デモ動画：[未定]
+- スクリーンショット：[未定]
+
+## システム構成
+
+```mermaid
+flowchart LR
+  User[ユーザー] -->|ガチャを引く| Client[Next.js App Router\nクライアント]
+  Client -->|POST /api/gacha| API[API Route\napp/api/gacha/route.ts]
+  API -->|レアリティ抽選\n+ シャッフルバッグ| Missions[(data/missions.ts)]
+  API -->|ミッションを返却| Client
+  Client -->|完了記録| LocalStorage[(localStorage)]
+  LocalStorage -->|実績・streak集計| Client
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- フロントエンドはNext.js（App Router）上でガチャ画面・実績画面を描画
+- ミッションの抽選はサーバー側のAPI Route（`app/api/gacha/route.ts`）で実施
+- 完了履歴は外部DBを使わず、クライアントのlocalStorageのみで永続化
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## 背景・課題
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+朝起きたときに「今日は何をしよう」という予定が事前に決まっていればいいが、決まっていない時間をどう使うか悩んでしまうことは多い。悩む時間自体は大切だが、悩みすぎて一日を無駄にしてしまうのはもったいない。そこで、まず「行動1」を提案してあげることで、その後の一日を充実させられるのではないかと考えた。「何もしなかった（説明できない）一日」を「何かをした（説明できる）一日」に変えることを目指している。特に大学生は夏休みに入り自由な時間が多くなるため、このアプリが役立つ場面が増えると考えている。
 
-## Learn More
+## 主な機能
 
-To learn more about Next.js, take a look at the following resources:
+- 機能1：ガチャ抽選（レアリティ付きミッションの提示）
+- 機能2：完了記録・実績画面（通算突破数・連続突破日数の表示）
+- 機能3：レアリティ演出・完了メッセージ（ノーマル／レア／スーパーレアで表示が変化）
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 工夫した点・こだわった点
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- ミッションの抽選ロジックは、暗号学的乱数（Node.jsの`crypto`）とレアリティごとのシャッフルバッグ方式を採用し、出現頻度に偏りが出ないよう設計している
+- ガチャの仕組み自体はシンプルだからこそ、誰が見ても直感的に分かりやすく、認知度の高いUI/UXになるよう意識している
+- ミッションの体験価値を損なわないよう、レアリティごとのバランスを考えて排出率を設計している
 
-## Deploy on Vercel
+## 使用技術
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- フロントエンド：Next.js（App Router）+ TypeScript、素のCSS
+- バックエンド：Next.js API Route
+- AI / API：なし（今後の展望で活用を検討）
+- データベース：なし（永続化はクライアントのlocalStorageのみ）
+- インフラ：Railway
+- その他：Node.js `crypto`モジュールによる暗号学的乱数抽選
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 今後の展望
+
+- 実績機能の拡充（バッジ判定など）を最優先で進める
+- ユーザーの傾向に合わせたミッション提案機能（AI活用も検討中、実現可否は要調査）
+
+## セットアップ方法
+
+```bash
+git clone <repository-url>
+cd hakkit
+
+# 必要なライブラリをインストール
+npm install
+
+# 開発サーバー起動
+npm run dev
+
+# 本番ビルド・起動
+npm run build
+npm run start
+```
+
+## メンバー
+
+| 名前 | 担当 |
+|---|---|
+| 岡田 悠暉 | リーダー |
+| 福島 巧己 | フロントエンド |
+| 佐藤 優成 | バックエンド（実績・デプロイ） |
+| 北村 空也 | バックエンド（ガチャロジック） |

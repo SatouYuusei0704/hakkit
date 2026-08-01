@@ -1,7 +1,7 @@
 import { AchievementRecord, Rarity } from "@/types/mission";
 
 const STORAGE_KEY = "hakkit:achievements";
-const RARITIES: Rarity[] = ["N", "R", "SR", "SSR"];
+const RARITIES: Rarity[] = ["N", "R", "SR"];
 
 function isAchievementRecord(value: unknown): value is AchievementRecord {
   if (typeof value !== "object" || value === null) return false;

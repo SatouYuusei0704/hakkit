@@ -25,7 +25,7 @@ export default function AchievementList() {
         <p>連続達成日数: {summary.streakDays}</p>
         <p>
           N:{summary.byRarity.N} / R:{summary.byRarity.R} / SR:
-          {summary.byRarity.SR} / SSR:{summary.byRarity.SSR}
+          {summary.byRarity.SR}
         </p>
       </div>
       <ul className={styles.list}>
