@@ -6,7 +6,6 @@ import { Mission } from "@/types/mission";
 import { saveAchievement } from "@/lib/storage";
 import GachaButton from "@/components/GachaButton";
 import MissionCard from "@/components/MissionCard";
-import RarityEffect from "@/components/RarityEffect";
 import styles from "./page.module.css";
 
 export default function Home() {
@@ -27,23 +26,24 @@ export default function Home() {
       rarity: mission.rarity,
       completedAt: new Date().toISOString(),
     });
-    setCompleted(true);
+    setMission(null);
+    setCompleted(false);
   }
 
   return (
     <div className={styles.page}>
       <main className={styles.main}>
         <h1>マンネリ突破ガチャ</h1>
-        <RarityEffect rarity={mission?.rarity ?? null}>
-          <MissionCard mission={mission} />
-        </RarityEffect>
-        <GachaButton onResult={handleResult} />
+        {!mission && <MissionCard mission={null} />}
+        <GachaButton mission={mission} onResult={handleResult} />
         {mission && (
-          <button onClick={handleComplete} disabled={completed}>
+          <button className={styles.completeButton} onClick={handleComplete} disabled={completed}>
             {completed ? "達成済み!" : "完了"}
           </button>
         )}
-        <Link href="/achievements">実績を見る</Link>
+        <Link className={styles.achievementsLink} href="/achievements">
+          実績を見る
+        </Link>
       </main>
     </div>
   );

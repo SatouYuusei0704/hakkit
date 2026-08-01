@@ -1,13 +1,38 @@
 :root {
   --background: #ffffff;
   --foreground: #171717;
-}
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --gacha-bg-top: #bee3f0;
+  --gacha-bg-bottom: #ffffff;
+  --card-shadow: rgba(0, 0, 0, 0.06);
+
+  --rarity-n: #9ca3af;
+  --rarity-n-bg-start: #f4f5f7;
+  --rarity-n-bg-end: #e7e8ec;
+  --rarity-n-border: #d4d7dc;
+  --rarity-n-text: #52525b;
+
+  --rarity-r: #4f9dfb;
+  --rarity-r-bg-start: #eaf3ff;
+  --rarity-r-bg-end: #d3e8ff;
+  --rarity-r-border: #8fc0ff;
+  --rarity-r-text: #1d4ed8;
+
+  --rarity-sr: #a855f7;
+  --rarity-sr-bg-start: #f5ecff;
+  --rarity-sr-bg-end: #e6d3ff;
+  --rarity-sr-border: #cda2ff;
+  --rarity-sr-text: #6b21a8;
+
+  --rarity-ssr: #f5b301;
+  --rarity-ssr-bg-start: #fff8e1;
+  --rarity-ssr-bg-end: #ffe9a8;
+  --rarity-ssr-border: #e0a500;
+  --rarity-ssr-text: #7a5200;
+
+  --surface: #f4f4f5;
+  --surface-alt: #fafafa;
+  --text-muted: #7a8a93;
 }
 
 html {
@@ -40,10 +65,4 @@ body {
 a {
   color: inherit;
   text-decoration: none;
-}
-
-@media (prefers-color-scheme: dark) {
-  html {
-    color-scheme: dark;
-  }
 }

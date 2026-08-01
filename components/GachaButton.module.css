@@ -1,19 +1,216 @@
-.button {
-  padding: 12px 32px;
-  border-radius: 999px;
-  border: none;
-  background: #171717;
-  color: white;
-  font-size: 1rem;
-  font-weight: 600;
-  cursor: pointer;
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  width: 100%;
 }
 
-.button:disabled {
-  opacity: 0.6;
+.machine {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.illustration {
+  position: relative;
+  width: clamp(240px, 80vw, 320px);
+  aspect-ratio: 290 / 445;
+}
+
+.illustrationImage {
+  object-fit: contain;
+  filter: drop-shadow(0 14px 18px rgba(80, 140, 200, 0.28));
+  transition: transform 0.15s ease-out;
+}
+
+.illustration:has(.hitArea:active:not(:disabled)) .illustrationImage {
+  transform: scale(0.97);
+}
+
+.hitArea {
+  position: absolute;
+  top: 52%;
+  left: 20%;
+  right: 20%;
+  bottom: 14%;
+  z-index: 3;
+  padding: 0;
+  border: none;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+  appearance: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.hitArea:disabled {
   cursor: not-allowed;
 }
 
-.button:hover:not(:disabled) {
-  opacity: 0.85;
+.ballFx {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  pointer-events: none;
 }
+
+.ballHalf {
+  position: absolute;
+  aspect-ratio: 1 / 1;
+  border-radius: 50%;
+  box-shadow: 0 3px 6px rgba(0, 0, 0, 0.18);
+}
+
+.ballHalf[data-color="neutral"] {
+  background: radial-gradient(circle at 34% 28%, #ffffff 0%, #e3ebf1 55%, #b9c6d1 100%);
+}
+.ballHalf[data-color="N"] {
+  background: radial-gradient(circle at 34% 28%, #ffffffcc 0%, transparent 45%), var(--rarity-n);
+}
+.ballHalf[data-color="R"] {
+  background: radial-gradient(circle at 34% 28%, #ffffffcc 0%, transparent 45%), var(--rarity-r);
+}
+.ballHalf[data-color="SR"] {
+  background: radial-gradient(circle at 34% 28%, #ffffffcc 0%, transparent 45%), var(--rarity-sr);
+}
+.ballHalf[data-color="SSR"] {
+  background: radial-gradient(circle at 34% 28%, #ffffffcc 0%, transparent 45%), var(--rarity-ssr);
+}
+
+.ballHalf[data-side="left"] {
+  clip-path: inset(0 50% 0 0);
+  animation: ballHalfLeft 1.7s cubic-bezier(0.3, 0.7, 0.25, 1) both;
+}
+.ballHalf[data-side="right"] {
+  clip-path: inset(0 0 0 50%);
+  animation: ballHalfRight 1.7s cubic-bezier(0.3, 0.7, 0.25, 1) both;
+}
+
+/* 0%-76%は左右で完全に同じ回転角にして、2つの半円がぴったり重なり
+   1つの球体が回転しているように見せる。76%以降だけ回転方向を分けて
+   左右に開いて割れるように見せる。 */
+@keyframes ballHalfLeft {
+  0% {
+    top: 30%;
+    left: 50%;
+    width: 13%;
+    transform: translate(-50%, -50%) rotate(0deg) translateX(0%);
+  }
+  45% {
+    top: 28%;
+    left: 50%;
+    width: 14%;
+    transform: translate(-50%, -50%) rotate(280deg) translateX(0%);
+  }
+  76% {
+    top: 58%;
+    left: 50%;
+    width: 26%;
+    transform: translate(-50%, -50%) rotate(600deg) translateX(0%);
+    opacity: 1;
+  }
+  100% {
+    top: 60%;
+    left: 50%;
+    width: 27%;
+    transform: translate(-50%, -50%) rotate(650deg) translateX(-70%);
+    opacity: 0;
+  }
+}
+
+@keyframes ballHalfRight {
+  0% {
+    top: 30%;
+    left: 50%;
+    width: 13%;
+    transform: translate(-50%, -50%) rotate(0deg) translateX(0%);
+  }
+  45% {
+    top: 28%;
+    left: 50%;
+    width: 14%;
+    transform: translate(-50%, -50%) rotate(280deg) translateX(0%);
+  }
+  76% {
+    top: 58%;
+    left: 50%;
+    width: 26%;
+    transform: translate(-50%, -50%) rotate(600deg) translateX(0%);
+    opacity: 1;
+  }
+  100% {
+    top: 60%;
+    left: 50%;
+    width: 27%;
+    transform: translate(-50%, -50%) rotate(550deg) translateX(70%);
+    opacity: 0;
+  }
+}
+
+.burst {
+  position: absolute;
+  top: 58%;
+  left: 50%;
+  width: 10%;
+  height: 10%;
+  border-radius: 50%;
+  background: radial-gradient(circle, #fffaea 0%, #ffe9a8 45%, transparent 72%);
+  transform: translate(-50%, -50%) scale(0.3);
+  opacity: 0;
+  animation: burstPop 1.7s ease-out both;
+}
+
+@keyframes burstPop {
+  0%,
+  72% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(0.3);
+  }
+  80% {
+    opacity: 0.9;
+    transform: translate(-50%, -50%) scale(1.7);
+  }
+  100% {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(2.6);
+  }
+}
+
+.resultOverlay {
+  position: absolute;
+  bottom: 50%;
+  left: 50%;
+  z-index: 5;
+  transform: translateX(-50%);
+  animation: cardReveal 0.45s ease-out both;
+}
+
+@keyframes cardReveal {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.82);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+.dismissing {
+  animation: cardDismiss 0.22s ease-in both;
+}
+
+@keyframes cardDismiss {
+  0% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.85);
+  }
+}
+
