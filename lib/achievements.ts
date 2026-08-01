@@ -1,6 +1,6 @@
 import { AchievementRecord, Rarity } from "@/types/mission";
 
-const RARITIES: Rarity[] = ["N", "R", "SR", "SSR"];
+const RARITIES: Rarity[] = ["N", "R", "SR"];
 
 export type Badge = {
   id: string;
@@ -44,12 +44,6 @@ const BADGE_DEFINITIONS: (Badge & { isEarned: (stats: BadgeStats) => boolean })[
     isEarned: (s) => s.total >= 30,
   },
   {
-    id: "ssr-hunter",
-    label: "SSRハンター",
-    description: "SSRミッションを達成した",
-    isEarned: (s) => s.byRarity.SSR >= 1,
-  },
-  {
     id: "sr-collector",
     label: "SRコレクター",
     description: "SRミッションを5回達成した",
@@ -76,7 +70,7 @@ const BADGE_DEFINITIONS: (Badge & { isEarned: (stats: BadgeStats) => boolean })[
 ];
 
 export function summarizeAchievements(records: AchievementRecord[]): AchievementSummary {
-  const byRarity: Record<Rarity, number> = { N: 0, R: 0, SR: 0, SSR: 0 };
+  const byRarity: Record<Rarity, number> = { N: 0, R: 0, SR: 0 };
   for (const record of records) {
     byRarity[record.rarity] += 1;
   }
