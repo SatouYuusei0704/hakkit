@@ -3,6 +3,7 @@ import { missions as defaultMissions } from "@/data/missions";
 
 const STORAGE_KEY = "hakkit:achievements";
 const MISSIONS_STORAGE_KEY = "hakkit:custom-missions";
+const LAST_ACTIVE_KEY = "hakkit:last-active";
 const RARITIES: Rarity[] = ["N", "R", "SR"];
 
 export function isMission(value: unknown): value is Mission {
@@ -127,4 +128,22 @@ export function resetMissions(): Mission[] {
     // no-op
   }
   return defaultMissions;
+}
+
+export function loadLastActiveDate(): string | null {
+  if (typeof window === "undefined") return null;
+  try {
+    return window.localStorage.getItem(LAST_ACTIVE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+export function recordActiveToday(): void {
+  if (typeof window === "undefined") return;
+  try {
+    window.localStorage.setItem(LAST_ACTIVE_KEY, new Date().toISOString().slice(0, 10));
+  } catch {
+    // no-op
+  }
 }
