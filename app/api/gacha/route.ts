@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
-import { missions } from "@/data/missions";
-import { GachaResult, Rarity } from "@/types/mission";
+import { missions as defaultMissions } from "@/data/missions";
+import { GachaResult, Mission, Rarity } from "@/types/mission";
+import { isMission } from "@/lib/storage";
 
 const RARITY_WEIGHTS: Record<Rarity, number> = {
   N: 70,
@@ -25,17 +26,26 @@ function pickRarity(): Rarity {
   return "N";
 }
 
-function pickMissionByRarity(rarity: Rarity) {
-  const candidates = missions.filter((mission) => mission.rarity === rarity);
+function pickMissionByRarity(rarity: Rarity, pool: Mission[]): Mission {
+  const candidates = pool.filter((mission) => mission.rarity === rarity);
   if (candidates.length > 0) {
     return candidates[Math.floor(Math.random() * candidates.length)];
   }
-  return missions[Math.floor(Math.random() * missions.length)];
+  return pool[Math.floor(Math.random() * pool.length)];
 }
 
-export async function POST() {
+export async function POST(request: Request) {
+  const body: unknown = await request.json().catch(() => null);
+  const requestedMissions =
+    body !== null && typeof body === "object" && Array.isArray((body as { missions?: unknown }).missions)
+      ? (body as { missions: unknown[] }).missions.filter(isMission)
+      : [];
+
+  // クライアントから有効なカスタムミッションが送られてきた場合はそちらを使う
+  const missions = requestedMissions.length > 0 ? requestedMissions : defaultMissions;
+
   const rarity = pickRarity();
-  const mission = pickMissionByRarity(rarity);
+  const mission = pickMissionByRarity(rarity, missions);
 
   const result: GachaResult = {
     rarity,

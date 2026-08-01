@@ -1,0 +1,90 @@
+.addForm {
+  display: flex;
+  gap: 8px;
+  width: 100%;
+}
+
+.addForm input[type="text"] {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #d0d0d0;
+}
+
+.addForm select {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #d0d0d0;
+}
+
+.addForm button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  background: #171717;
+  color: white;
+  cursor: pointer;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.item input[type="text"] {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #d0d0d0;
+}
+
+.item select {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #d0d0d0;
+}
+
+.item button {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: none;
+  background: #b00020;
+  color: white;
+  cursor: pointer;
+}
+
+.empty {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.resetButton {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: 1px solid #d0d0d0;
+  background: transparent;
+  cursor: pointer;
+}
+
+@media (prefers-color-scheme: dark) {
+  .addForm input[type="text"],
+  .addForm select,
+  .item input[type="text"],
+  .item select,
+  .resetButton {
+    border-color: #444;
+    background: #111;
+    color: #ededed;
+  }
+}

@@ -1,7 +1,20 @@
-import { AchievementRecord, Rarity } from "@/types/mission";
+import { AchievementRecord, Mission, Rarity } from "@/types/mission";
+import { missions as defaultMissions } from "@/data/missions";
 
 const STORAGE_KEY = "hakkit:achievements";
+const MISSIONS_STORAGE_KEY = "hakkit:custom-missions";
 const RARITIES: Rarity[] = ["N", "R", "SR"];
+
+export function isMission(value: unknown): value is Mission {
+  if (typeof value !== "object" || value === null) return false;
+  const m = value as Record<string, unknown>;
+  return (
+    typeof m.id === "string" &&
+    typeof m.text === "string" &&
+    typeof m.rarity === "string" &&
+    RARITIES.includes(m.rarity as Rarity)
+  );
+}
 
 function isAchievementRecord(value: unknown): value is AchievementRecord {
   if (typeof value !== "object" || value === null) return false;
@@ -70,4 +83,48 @@ export function clearAchievements(): void {
   } catch {
     // no-op
   }
+}
+
+export function loadMissions(): Mission[] {
+  if (typeof window === "undefined") return defaultMissions;
+
+  let raw: string | null;
+  try {
+    raw = window.localStorage.getItem(MISSIONS_STORAGE_KEY);
+  } catch {
+    return defaultMissions;
+  }
+  if (!raw) return defaultMissions;
+
+  try {
+    const parsed: unknown = JSON.parse(raw);
+    if (!Array.isArray(parsed)) return defaultMissions;
+    const valid = parsed.filter(isMission);
+    // 保存されているカスタムミッションが全て不正な場合はデフォルトにフォールバックする
+    return valid.length > 0 ? valid : defaultMissions;
+  } catch {
+    return defaultMissions;
+  }
+}
+
+export function saveMissions(missions: Mission[]): Mission[] {
+  if (typeof window === "undefined") return missions;
+
+  try {
+    window.localStorage.setItem(MISSIONS_STORAGE_KEY, JSON.stringify(missions));
+  } catch {
+    // 容量超過等で保存に失敗しても、呼び出し元にはメモリ上の結果を返す
+  }
+  return missions;
+}
+
+export function resetMissions(): Mission[] {
+  if (typeof window === "undefined") return defaultMissions;
+
+  try {
+    window.localStorage.removeItem(MISSIONS_STORAGE_KEY);
+  } catch {
+    // no-op
+  }
+  return defaultMissions;
 }
