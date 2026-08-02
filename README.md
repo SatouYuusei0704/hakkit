@@ -15,7 +15,7 @@ Gachalyは、「何をすればいいか分からない」という日常のち�
 ## デモ
 
 - 発表資料URL：[未定]
-- デモURL：[未定]
+- デモURL：https://hakkit-production.up.railway.app/
 - デモ動画：[未定]
 - スクリーンショット：[未定]
 
@@ -24,16 +24,25 @@ Gachalyは、「何をすればいいか分からない」という日常のち�
 ```mermaid
 flowchart LR
   User[ユーザー] -->|ガチャを引く| Client[Next.js App Router\nクライアント]
-  Client -->|POST /api/gacha| API[API Route\napp/api/gacha/route.ts]
-  API -->|レアリティ抽選\n+ シャッフルバッグ| Missions[(data/missions.ts)]
-  API -->|ミッションを返却| Client
-  Client -->|完了記録| LocalStorage[(localStorage)]
-  LocalStorage -->|実績・streak集計| Client
+
+  Client -->|POST /api/gacha| GachaAPI[API Route\napp/api/gacha/route.ts]
+  GachaAPI -->|重み付き乱数抽選\nN70% / R22% / SR8%| Missions[(data/missions.ts)]
+  GachaAPI -->|ミッションを返却| Client
+
+  Client -->|AIにおまかせ| AiAPI[API Route\napp/api/ai/generate-missions/route.ts]
+  AiAPI -->|プロンプト送信| Gemini[(Gemini API)]
+  Gemini -->|候補3件を返却| AiAPI
+  AiAPI -->|候補を返却| Client
+
+  Client -->|ミッション・実績\n・AI下書き| IndexedDB[(IndexedDB: hakkitDB)]
+  Client -->|完了時に撮影した写真Blob| PhotoDB[(IndexedDB: photos store)]
+  IndexedDB -->|実績・streak・バッジ集計| Client
 ```
 
-- フロントエンドはNext.js（App Router）上でガチャ画面・実績画面を描画
+- フロントエンドはNext.js（App Router）上でガチャ画面・実績画面・記録カレンダー・BGM設定画面を描画
 - ミッションの抽選はサーバー側のAPI Route（`app/api/gacha/route.ts`）で実施
-- 完了履歴は外部DBを使わず、クライアントのlocalStorageのみで永続化
+- AIミッション提案はサーバー側のAPI Route（`app/api/ai/generate-missions/route.ts`）がGemini APIを呼び出し、構造化出力（JSON）で候補を生成
+- 完了履歴・カスタムミッション・AI下書きは外部DBを使わず、クライアントのIndexedDB（`idb`ライブラリ、DB名`hakkitDB`）のみで永続化。撮影写真は別途IndexedDBの`photos`ストアにBlobとして保存
 
 ## 背景・課題
 
@@ -41,29 +50,47 @@ flowchart LR
 
 ## 主な機能
 
-- 機能1：ガチャ抽選（レアリティ付きミッションの提示）
-- 機能2：完了記録・実績画面（通算突破数・連続突破日数の表示）
-- 機能3：レアリティ演出・完了メッセージ（ノーマル／レア／スーパーレアで表示が変化）
+- **ガチャ抽選**：ボタン1つでレアリティ付きミッションを1件提示（重み付き乱数 N:70% / R:22% / SR:8%）
+- **完了記録・実績画面**：通算突破数、連続突破日数（streak）、レアリティ別内訳を表示
+- **バッジ・ミッション図鑑**：「はじめの一歩」「駆け出し」「常連」「SRコレクター」「週間チャレンジャー」など達成条件付きバッジと、達成済みミッションが埋まっていくコレクション画面
+- **レアリティ演出・完了メッセージ**：ノーマル／レア／スーパーレアで表示が変化
+- **写真付き記録**：ミッション完了時にカメラで撮影、または後から記録画面で追加。日付ごとのカレンダーから過去の記録・写真を閲覧・削除可能
+- **ガチャ内容のカスタム編集**：ミッション文・レアリティの手動追加／編集／削除、デフォルト構成へのリセット
+- **AIにおまかせミッション提案**：気分・使える時間・場所・任意のテーマを選ぶと、Gemini APIが3件のミッション候補（文章＋レアリティ＋提案理由）を生成。気に入った候補だけを採用してガチャ内容に追加できる
+- **BGM設定**：複数トラックからの選択と音量調整（設定はlocalStorageに保存）
 
 ## 工夫した点・こだわった点
 
-- ミッションの抽選ロジックは、暗号学的乱数（Node.jsの`crypto`）とレアリティごとのシャッフルバッグ方式を採用し、出現頻度に偏りが出ないよう設計している
 - ガチャの仕組み自体はシンプルだからこそ、誰が見ても直感的に分かりやすく、認知度の高いUI/UXになるよう意識している
 - ミッションの体験価値を損なわないよう、レアリティごとのバランスを考えて排出率を設計している
+- AI提案機能はGeminiの`responseSchema`で出力形式を構造化し、不正な候補（レアリティ不正・空文字など）をサーバー側でフィルタリングすることで表示崩れを防止
+- AI・IndexedDBが失敗してもアプリ全体が止まらないよう、各所でtry/catchによるフォールバック（デフォルトミッションへの切り替え、手動追加フォームは常に使用可能）を徹底
 
 ## 使用技術
 
 - フロントエンド：Next.js（App Router）+ TypeScript、素のCSS
 - バックエンド：Next.js API Route
-- AI / API：なし（今後の展望で活用を検討）
-- データベース：なし（永続化はクライアントのlocalStorageのみ）
+- AI / API：Google Gemini API（ミッション候補の構造化生成）
+- データベース：なし（サーバー側は非永続。永続化はすべてクライアントのIndexedDB、`idb`ライブラリを使用）
 - インフラ：Railway
-- その他：Node.js `crypto`モジュールによる暗号学的乱数抽選
+- その他：`crypto.randomUUID()`によるID発行
+
+## 環境変数
+
+| 変数名 | 用途 | スコープ |
+|---|---|---|
+| `GEMINI_API_KEY` | Gemini API認証キー（AIミッション提案機能で使用） | サーバーのみ（`NEXT_PUBLIC_`を付けない） |
+| `GEMINI_MODEL` | 使用モデル名（省略時 `gemini-flash-latest`） | サーバーのみ（任意） |
+
+ローカル開発では`.env.local`に設定し、本番環境ではRailwayの対象サービスのVariablesに設定する。
 
 ## 今後の展望
 
-- 実績機能の拡充（バッジ判定など）を最優先で進める
-- ユーザーの傾向に合わせたミッション提案機能（AI活用も検討中、実現可否は要調査）
+- ミッション達成履歴やコレクションのSNSシェア機能
+- ユーザー同士でミッションを投稿・共有できるコミュニティ機能
+- ログイン機能＋サーバー側DBを追加し、複数端末での実績・ガチャ内容の同期に対応
+- AI提案の履歴閲覧・再利用UI（現状は下書きをIndexedDBに保存するのみ）
+- 達成した写真をまとめて振り返れるアルバム／タイムライン表示
 
 ## セットアップ方法
 
@@ -73,6 +100,8 @@ cd hakkit
 
 # 必要なライブラリをインストール
 npm install
+
+# .env.local を作成し、GEMINI_API_KEY 等を設定（AI提案機能を使う場合）
 
 # 開発サーバー起動
 npm run dev
