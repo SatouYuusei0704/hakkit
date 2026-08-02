@@ -21,9 +21,12 @@ interface BgmContextValue {
   isPlaying: boolean;
   status: BgmStatus;
   noteText: string;
+  showConsentPrompt: boolean;
   togglePlayback: () => Promise<void>;
   handleTrackChange: (trackId: string) => void;
   handleVolumeChange: (nextPercent: number) => void;
+  confirmPlay: () => void;
+  declinePlay: () => void;
 }
 
 const BgmContext = createContext<BgmContextValue | undefined>(undefined);
@@ -34,8 +37,7 @@ export function BgmProvider({ children }: { children: ReactNode }) {
   const [volumePercent, setVolumePercent] = useState(45);
   const [isPlaying, setIsPlaying] = useState(false);
   const [status, setStatus] = useState<BgmStatus>("loading");
-  const [loaded, setLoaded] = useState(false);
-  const [autoPlayAttempted, setAutoPlayAttempted] = useState(false);
+  const [showConsentPrompt, setShowConsentPrompt] = useState(true);
 
   const selectedTrack = tracks.find((track) => track.id === selectedTrackId) ?? tracks[0];
 
@@ -71,7 +73,6 @@ export function BgmProvider({ children }: { children: ReactNode }) {
     const handlePause = () => setIsPlaying(false);
     const handleCanPlay = () => {
       setStatus("ready");
-      setLoaded(true);
     };
     const handleError = () => setStatus("error");
 
@@ -94,23 +95,24 @@ export function BgmProvider({ children }: { children: ReactNode }) {
 
     setStatus("loading");
     setIsPlaying(false);
-    setLoaded(false);
-    setAutoPlayAttempted(false);
     audio.pause();
     audio.load();
   }, [selectedTrackId]);
 
-  useEffect(() => {
+  const confirmPlay = () => {
     const audio = audioRef.current;
+    setShowConsentPrompt(false);
     if (!audio) return;
 
-    if (loaded && !autoPlayAttempted) {
-      setAutoPlayAttempted(true);
-      void audio.play().catch(() => {
-        // 自動再生制限がある場合は無視
-      });
-    }
-  }, [loaded, autoPlayAttempted]);
+    void audio.play().catch((error) => {
+      console.warn("BGM再生に失敗しました", error);
+      setStatus("error");
+    });
+  };
+
+  const declinePlay = () => {
+    setShowConsentPrompt(false);
+  };
 
   const togglePlayback = async () => {
     const audio = audioRef.current;
@@ -155,9 +157,12 @@ export function BgmProvider({ children }: { children: ReactNode }) {
         isPlaying,
         status,
         noteText,
+        showConsentPrompt,
         togglePlayback,
         handleTrackChange,
         handleVolumeChange,
+        confirmPlay,
+        declinePlay,
       }}
     >
       <audio ref={audioRef} src={selectedTrack.src} loop preload="auto" style={{ display: "none" }} />
