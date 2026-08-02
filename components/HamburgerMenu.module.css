@@ -1,0 +1,141 @@
+.wrapper {
+  position: fixed;
+  top: 16px;
+  right: 16px;
+  z-index: 10;
+}
+
+.trigger {
+  width: 40px;
+  height: 40px;
+  border-radius: 8px;
+  border: none;
+  background: #171717;
+  color: white;
+  font-size: 1.25rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.trigger:hover {
+  opacity: 0.85;
+}
+
+.menu {
+  position: absolute;
+  top: 48px;
+  right: 0;
+  min-width: 180px;
+  margin: 0;
+  padding: 8px;
+  list-style: none;
+  border-radius: 8px;
+  background: #ffffff;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.menuAction {
+  display: block;
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid #e6e6e6;
+  border-radius: 8px;
+  background: #f8f8f8;
+  color: #171717;
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  text-align: left;
+  text-decoration: none;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.menuAction:hover {
+  opacity: 0.9;
+}
+
+.confirmOverlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.confirmModal {
+  width: min(100%, 320px);
+  padding: 24px 20px;
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.2);
+}
+
+.confirmTitle {
+  margin: 0 0 20px;
+  color: #171717;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.5;
+  text-align: center;
+}
+
+.confirmActions {
+  display: flex;
+  gap: 10px;
+}
+
+.confirmCancelButton,
+.confirmConfirmButton {
+  flex: 1;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.confirmCancelButton {
+  background: #f1f1f1;
+  color: #171717;
+}
+
+.confirmConfirmButton {
+  background: #171717;
+  color: #ffffff;
+}
+
+@media (prefers-color-scheme: dark) {
+  .menu {
+    background: #f7f7f7;
+  }
+
+  .menuAction {
+    background: #ffffff;
+    color: #171717;
+    border-color: #d9d9d9;
+  }
+
+  .confirmModal {
+    background: #171717;
+  }
+
+  .confirmTitle {
+    color: #f7f7f7;
+  }
+
+  .confirmCancelButton {
+    background: #2b2b2b;
+    color: #f7f7f7;
+  }
+
+  .confirmConfirmButton {
+    background: #ffffff;
+    color: #171717;
+  }
+}

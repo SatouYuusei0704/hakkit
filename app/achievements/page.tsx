@@ -8,7 +8,9 @@ export default function AchievementsPage() {
       <main className={styles.main}>
         <h1>実績</h1>
         <AchievementList />
-        <Link href="/">ガチャに戻る</Link>
+        <Link className={styles.achievementsLink} href="/">
+          ガチャに戻る
+        </Link>
       </main>
     </div>
   );

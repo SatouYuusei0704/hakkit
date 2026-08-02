@@ -1,19 +1,28 @@
 .card {
   min-width: 280px;
   min-height: 140px;
-  border-radius: 16px;
+  border-radius: 22px;
   padding: 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 12px;
-  background: #f4f4f5;
+  background: var(--surface);
+  border: 1px solid transparent;
+  box-shadow: 0 6px 16px var(--card-shadow);
   text-align: center;
 }
 
 .placeholder {
-  color: #888;
+  color: var(--text-muted);
+}
+
+.capsuleIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 28%, #ffffffcc 0%, transparent 45%), var(--rarity-n);
 }
 
 .rarity {
@@ -25,9 +34,61 @@
   background: #e4e4e7;
 }
 
-/* TODO(フロント担当): レアリティごとの色分け（例: SSRは金色）を追加してください */
-
 .text {
   font-size: 1.1rem;
   font-weight: 600;
+}
+
+.card[data-rarity="N"] {
+  background: linear-gradient(135deg, var(--rarity-n-bg-start), var(--rarity-n-bg-end));
+  border-color: var(--rarity-n-border);
+}
+.card[data-rarity="N"] .capsuleIcon {
+  background: radial-gradient(circle at 32% 28%, #ffffffcc 0%, transparent 45%), var(--rarity-n);
+}
+.card[data-rarity="N"] .rarity {
+  background: var(--rarity-n);
+  color: #fff;
+}
+
+.card[data-rarity="R"] {
+  background: linear-gradient(135deg, var(--rarity-r-bg-start), var(--rarity-r-bg-end));
+  border-color: var(--rarity-r-border);
+}
+.card[data-rarity="R"] .capsuleIcon {
+  background: radial-gradient(circle at 32% 28%, #ffffffcc 0%, transparent 45%), var(--rarity-r);
+}
+.card[data-rarity="R"] .rarity {
+  background: var(--rarity-r);
+  color: #fff;
+}
+
+.card[data-rarity="SR"] {
+  background: linear-gradient(135deg, var(--rarity-sr-bg-start), var(--rarity-sr-bg-end));
+  border-color: var(--rarity-sr-border);
+}
+.card[data-rarity="SR"] .capsuleIcon {
+  background: radial-gradient(circle at 32% 28%, #ffffffcc 0%, transparent 45%), var(--rarity-sr);
+}
+.card[data-rarity="SR"] .rarity {
+  background: var(--rarity-sr);
+  color: #fff;
+}
+
+.card[data-rarity="SSR"] {
+  background: linear-gradient(135deg, var(--rarity-ssr-bg-start), var(--rarity-ssr-bg-end));
+  border-color: var(--rarity-ssr-border);
+}
+.card[data-rarity="SSR"] .capsuleIcon {
+  background: radial-gradient(circle at 32% 28%, #ffffffcc 0%, transparent 45%), var(--rarity-ssr);
+}
+.card[data-rarity="SSR"] .rarity {
+  background: var(--rarity-ssr);
+  color: #fff;
+}
+
+@media (min-width: 768px) {
+  .card {
+    min-width: 320px;
+  }
 }
