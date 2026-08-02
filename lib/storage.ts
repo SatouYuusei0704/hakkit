@@ -45,32 +45,57 @@ interface HakkitDB extends DBSchema {
   };
 }
 
+const DB_OPEN_TIMEOUT_MS = 3000;
+
 let dbPromise: Promise<IDBPDatabase<HakkitDB>> | null = null;
+
+function withTimeout<T>(promise: Promise<T>, ms: number): Promise<T> {
+  return new Promise((resolve, reject) => {
+    const timer = setTimeout(() => reject(new Error("timeout")), ms);
+    promise.then(
+      (value) => {
+        clearTimeout(timer);
+        resolve(value);
+      },
+      (err) => {
+        clearTimeout(timer);
+        reject(err);
+      }
+    );
+  });
+}
 
 function getDB(): Promise<IDBPDatabase<HakkitDB>> {
   if (!dbPromise) {
-    dbPromise = openDB<HakkitDB>(DB_NAME, DB_VERSION, {
-      upgrade(db) {
-        if (!db.objectStoreNames.contains("meta")) {
-          db.createObjectStore("meta", { keyPath: "key" });
-        }
-        if (!db.objectStoreNames.contains("missions")) {
-          const store = db.createObjectStore("missions", { keyPath: "id" });
-          store.createIndex("userId", "userId");
-          store.createIndex("rarity", "rarity");
-        }
-        if (!db.objectStoreNames.contains("achievements")) {
-          const store = db.createObjectStore("achievements", { keyPath: "id" });
-          store.createIndex("userId", "userId");
-          store.createIndex("completedAt", "completedAt");
-          store.createIndex("missionId", "missionId");
-        }
-        if (!db.objectStoreNames.contains("aiDrafts")) {
-          const store = db.createObjectStore("aiDrafts", { keyPath: "id" });
-          store.createIndex("userId", "userId");
-          store.createIndex("createdAt", "createdAt");
-        }
-      },
+    dbPromise = withTimeout(
+      openDB<HakkitDB>(DB_NAME, DB_VERSION, {
+        upgrade(db) {
+          if (!db.objectStoreNames.contains("meta")) {
+            db.createObjectStore("meta", { keyPath: "key" });
+          }
+          if (!db.objectStoreNames.contains("missions")) {
+            const store = db.createObjectStore("missions", { keyPath: "id" });
+            store.createIndex("userId", "userId");
+            store.createIndex("rarity", "rarity");
+          }
+          if (!db.objectStoreNames.contains("achievements")) {
+            const store = db.createObjectStore("achievements", { keyPath: "id" });
+            store.createIndex("userId", "userId");
+            store.createIndex("completedAt", "completedAt");
+            store.createIndex("missionId", "missionId");
+          }
+          if (!db.objectStoreNames.contains("aiDrafts")) {
+            const store = db.createObjectStore("aiDrafts", { keyPath: "id" });
+            store.createIndex("userId", "userId");
+            store.createIndex("createdAt", "createdAt");
+          }
+        },
+      }),
+      DB_OPEN_TIMEOUT_MS
+    ).catch((err) => {
+      // 接続がスタックした場合、次回呼び出し時に再度openDBを試せるようにする
+      dbPromise = null;
+      throw err;
     });
   }
   return dbPromise;
