@@ -16,7 +16,7 @@
 
 .illustration {
   position: relative;
-  width: clamp(160px, min(80vw, 42dvh), 320px);
+  width: clamp(140px, min(70vw, 33dvh), 300px);
   aspect-ratio: 290 / 445;
 }
 

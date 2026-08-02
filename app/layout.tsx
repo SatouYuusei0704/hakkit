@@ -17,8 +17,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "マンネリ突破ガチャ",
-  description: "日常のマンネリをランダムミッションで突破するアプリ",
+  title: "Gachaly",
+  description: "Gacha x Daily | 日常のマンネリをランダムミッションで突破するアプリ",
 };
 
 export default function RootLayout({
