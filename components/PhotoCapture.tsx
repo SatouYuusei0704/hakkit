@@ -36,7 +36,6 @@ export default function PhotoCapture({ value, onChange }: Props) {
         <input
           type="file"
           accept="image/*"
-          capture="environment"
           onChange={handleFileChange}
           className={styles.input}
         />
