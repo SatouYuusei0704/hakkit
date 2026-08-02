@@ -184,6 +184,55 @@ export async function saveMissions(missions: Mission[]): Promise<Mission[]> {
   return missions;
 }
 
+const BGM_TRACK_STORAGE_KEY = "hakkit:bgm-track";
+const BGM_VOLUME_STORAGE_KEY = "hakkit:bgm-volume";
+
+export function loadBgmTrackId(): string | null {
+  if (typeof window === "undefined") return null;
+
+  try {
+    return window.localStorage.getItem(BGM_TRACK_STORAGE_KEY);
+  } catch {
+    return null;
+  }
+}
+
+export function saveBgmTrackId(trackId: string): string {
+  if (typeof window === "undefined") return trackId;
+
+  try {
+    window.localStorage.setItem(BGM_TRACK_STORAGE_KEY, trackId);
+  } catch {
+    // no-op
+  }
+  return trackId;
+}
+
+export function loadBgmVolume(): number | null {
+  if (typeof window === "undefined") return null;
+
+  try {
+    const raw = window.localStorage.getItem(BGM_VOLUME_STORAGE_KEY);
+    if (raw === null) return null;
+    const parsed = Number(raw);
+    return Number.isFinite(parsed) ? Math.min(1, Math.max(0, parsed)) : null;
+  } catch {
+    return null;
+  }
+}
+
+export function saveBgmVolume(volume: number): number {
+  const normalized = Math.min(1, Math.max(0, volume));
+  if (typeof window === "undefined") return normalized;
+
+  try {
+    window.localStorage.setItem(BGM_VOLUME_STORAGE_KEY, String(normalized));
+  } catch {
+    // no-op
+  }
+  return normalized;
+}
+
 export async function resetMissions(): Promise<Mission[]> {
   if (typeof indexedDB === "undefined") return defaultMissions;
 

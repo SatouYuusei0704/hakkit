@@ -43,6 +43,11 @@ export default function HamburgerMenu() {
             </Link>
           </li>
           <li>
+            <Link className={styles.menuAction} href="/bgm" onClick={() => setOpen(false)}>
+              BGM設定
+            </Link>
+          </li>
+          <li>
             <button
               type="button"
               className={styles.menuAction}
