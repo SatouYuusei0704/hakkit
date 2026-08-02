@@ -2,6 +2,7 @@ import Link from "next/link";
 import styles from "./Footer.module.css";
 
 const navItems = [
+  { href: "/achievements", label: "実績", icon: "🎖️" },
   {
     href: "/",
     label: "ガチャ",
@@ -21,7 +22,6 @@ const navItems = [
       </svg>
     ),
   },
-  { href: "/achievements", label: "実績", icon: "🎖️" },
   {
     href: "/records",
     label: "記録",
