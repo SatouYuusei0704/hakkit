@@ -8,7 +8,6 @@
   align-items: center;
   justify-content: center;
   font-family: var(--font-geist-sans);
-  background: linear-gradient(180deg, var(--gacha-bg-top) 0%, var(--gacha-bg-bottom) 100%);
   padding-bottom: 92px;
 }
 
