@@ -1,0 +1,108 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: rgba(15, 53, 84, 0.45);
+  backdrop-filter: blur(4px);
+}
+
+.modal {
+  width: min(100%, 340px);
+  padding: 28px 24px;
+  border-radius: 24px;
+  background: #ffffff;
+  box-shadow: 0 12px 32px rgba(15, 53, 84, 0.25);
+  text-align: center;
+}
+
+.title {
+  margin: 0 0 8px;
+  color: #0f3554;
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.5;
+}
+
+.description {
+  margin: 0 0 24px;
+  color: #2f6b8f;
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+}
+
+.declineButton,
+.confirmButton {
+  flex: 1;
+  padding: 10px 12px;
+  border: none;
+  border-radius: 999px;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.declineButton {
+  background: rgba(74, 122, 147, 0.14);
+  color: #2f6b8f;
+}
+
+.confirmButton {
+  background: #3b88c5;
+  color: #ffffff;
+}
+
+.declineButton:hover,
+.confirmButton:hover {
+  opacity: 0.85;
+}
+
+.laterNote {
+  margin: 16px 0 0;
+  color: #5f7b8d;
+  font-size: 0.78rem;
+  line-height: 1.5;
+}
+
+.laterLink {
+  color: #2f6b8f;
+  font-weight: 700;
+  text-decoration: underline;
+}
+
+@media (prefers-color-scheme: dark) {
+  .modal {
+    background: #10222f;
+  }
+
+  .title {
+    color: #e5f6fb;
+  }
+
+  .description {
+    color: #a9c9dd;
+  }
+
+  .declineButton {
+    background: rgba(197, 224, 240, 0.14);
+    color: #c1e8f9;
+  }
+
+  .laterNote {
+    color: #8fb2c8;
+  }
+
+  .laterLink {
+    color: #c1e8f9;
+  }
+}

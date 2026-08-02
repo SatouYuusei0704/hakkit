@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import Footer from "@/components/Footer";
 import { BgmProvider } from "@/components/BgmProvider";
+import BgmConsentModal from "@/components/BgmConsentModal";
 import AnimatedBackground from "@/components/AnimatedBackground";
 import "./globals.css";
 
@@ -29,7 +30,10 @@ export default function RootLayout({
     <html lang="ja" className={`${geistSans.variable} ${geistMono.variable}`}>
       <body>
         <AnimatedBackground />
-        <BgmProvider>{children}</BgmProvider>
+        <BgmProvider>
+          <BgmConsentModal />
+          {children}
+        </BgmProvider>
         <Footer />
       </body>
     </html>

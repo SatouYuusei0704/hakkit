@@ -40,9 +40,3 @@
     transform: translate3d(-160vw, 160vh, 0) rotate(var(--capsule-rotate));
   }
 }
-
-@media (prefers-reduced-motion: reduce) {
-  .capsule {
-    animation: none;
-  }
-}
