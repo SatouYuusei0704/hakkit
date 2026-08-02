@@ -1,0 +1,70 @@
+.dayRecords {
+  width: 100%;
+}
+
+.dayRecords h2 {
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.empty {
+  color: #888;
+  font-size: 0.9rem;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.item {
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.03);
+}
+
+.itemHeader {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.rarity {
+  font-weight: 700;
+  font-size: 0.8rem;
+}
+
+.photoRow {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.deletePhotoButton {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #d0d0d0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.8rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .item {
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .empty {
+    color: #aaa;
+  }
+
+  .deletePhotoButton {
+    border-color: #444;
+    color: #ededed;
+  }
+}

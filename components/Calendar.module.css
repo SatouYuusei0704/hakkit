@@ -1,0 +1,92 @@
+.wrapper {
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.navButton {
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  border: 1px solid #d0d0d0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.monthLabel {
+  font-weight: 600;
+}
+
+.weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  text-align: center;
+  font-size: 0.8rem;
+  color: #888;
+  margin-bottom: 4px;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 4px;
+}
+
+.empty {
+  aspect-ratio: 1;
+}
+
+.day {
+  position: relative;
+  aspect-ratio: 1;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.day:hover {
+  background: #f0f0f0;
+}
+
+.day[data-today] {
+  border-color: #9fc9dd;
+}
+
+.day[data-selected] {
+  background: #4a7a93;
+  color: white;
+}
+
+.dot {
+  position: absolute;
+  bottom: 4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #e8905a;
+}
+
+@media (prefers-color-scheme: dark) {
+  .navButton {
+    border-color: #444;
+    color: #ededed;
+  }
+
+  .day {
+    color: #ededed;
+  }
+
+  .day:hover {
+    background: #262626;
+  }
+}
