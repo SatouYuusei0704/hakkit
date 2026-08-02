@@ -1,3 +1,19 @@
+<div align="center">
+
+<img src="public/logo.png" alt="Gachaly" width="360" />
+
+### 「何しよう」を、ワンクリックで「やった」に変える
+
+[![Next.js](https://img.shields.io/badge/Next.js-16-000000?style=flat-square&logo=nextdotjs&logoColor=white)](https://nextjs.org/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5-3178C6?style=flat-square&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-19-61DAFB?style=flat-square&logo=react&logoColor=white)](https://react.dev/)
+[![Gemini API](https://img.shields.io/badge/Gemini_API-AI提案機能-4285F4?style=flat-square&logo=googlegemini&logoColor=white)](https://ai.google.dev/)
+[![Railway](https://img.shields.io/badge/Deploy-Railway-0B0D0E?style=flat-square&logo=railway&logoColor=white)](https://railway.app/)
+
+</div>
+
+---
+
 # Gachaly
 
 ## チーム名
@@ -16,8 +32,51 @@ Gachalyは、「何をすればいいか分からない」という日常のち�
 
 - 発表資料URL：[未定]
 - デモURL：https://hakkit-production.up.railway.app/
-- デモ動画：[未定]
-- スクリーンショット：[未定]
+
+### デモ動画
+
+[▶️ デモ動画を再生（docs/videos/demo.mp4）](docs/videos/demo.mp4)
+
+> GitHub上で開くと、そのままブラウザ内蔵のプレーヤーで再生できます。
+
+### スクリーンショット
+
+<!--
+  撮影後、以下のファイル名で docs/images/ に保存すると自動的に表示されます。
+  例: docs/images/01-top.png
+-->
+
+<table>
+  <tr>
+    <td align="center" width="33%">
+      <img src="docs/images/01-top.png" width="220" alt="トップ画面" /><br />
+      トップ（初期状態）
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/images/02-gacha-result.png" width="220" alt="ガチャ結果" /><br />
+      ガチャ結果（レアリティ演出）
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/images/04-achievements.png" width="220" alt="実績画面" /><br />
+      実績・ミッション図鑑
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="33%">
+      <img src="docs/images/05-calendar.png" width="220" alt="記録カレンダー" /><br />
+      記録画面（カレンダー）
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/images/07-edit-missions.png" width="220" alt="ガチャ内容編集" /><br />
+      ガチャ内容の編集
+    </td>
+    <td align="center" width="33%">
+      <img src="docs/images/08-ai-suggest.png" width="220" alt="AIおまかせ提案" /><br />
+      AIにおまかせ提案
+    </td>
+  </tr>
+</table>
+
 
 ## システム構成
 
@@ -68,12 +127,14 @@ flowchart LR
 
 ## 使用技術
 
-- フロントエンド：Next.js（App Router）+ TypeScript、素のCSS
-- バックエンド：Next.js API Route
-- AI / API：Google Gemini API（ミッション候補の構造化生成）
-- データベース：なし（サーバー側は非永続。永続化はすべてクライアントのIndexedDB、`idb`ライブラリを使用）
-- インフラ：Railway
-- その他：`crypto.randomUUID()`によるID発行
+| カテゴリ | 技術 |
+|---|---|
+| フロントエンド | ![Next.js](https://img.shields.io/badge/Next.js-000000?style=flat-square&logo=nextdotjs&logoColor=white) ![React](https://img.shields.io/badge/React-61DAFB?style=flat-square&logo=react&logoColor=white) ![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?style=flat-square&logo=typescript&logoColor=white) 素のCSS |
+| バックエンド | Next.js API Route |
+| AI / API | ![Gemini API](https://img.shields.io/badge/Google_Gemini_API-4285F4?style=flat-square&logo=googlegemini&logoColor=white)（ミッション候補の構造化生成） |
+| データベース | なし（サーバー側は非永続。永続化はすべてクライアントのIndexedDB、`idb`ライブラリを使用） |
+| インフラ | ![Railway](https://img.shields.io/badge/Railway-0B0D0E?style=flat-square&logo=railway&logoColor=white) |
+| その他 | `crypto.randomUUID()`によるID発行 |
 
 ## 環境変数
 
@@ -115,7 +176,9 @@ npm run start
 
 | 名前 | 担当 |
 |---|---|
-| 岡田 悠暉 | リーダー |
+| 岡田 悠暉 | リーダー・ |
 | 福島 巧己 | フロントエンド |
 | 佐藤 優成 | バックエンド（実績・デプロイ） |
 | 北村 空也 | バックエンド（ガチャロジック） |
+
+---
