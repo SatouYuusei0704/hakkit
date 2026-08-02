@@ -210,6 +210,24 @@ export async function deleteAchievement(id: string): Promise<AchievementRecord[]
   return (await loadAchievements()).filter((record) => record.id !== id);
 }
 
+export async function updateAchievement(
+  id: string,
+  updates: Partial<Omit<AchievementRecord, "id">>
+): Promise<AchievementRecord[]> {
+  if (typeof indexedDB !== "undefined") {
+    try {
+      const db = await getDB();
+      const existing = await db.get("achievements", id);
+      if (existing) {
+        await db.put("achievements", { ...existing, ...updates });
+      }
+    } catch {
+      // 容量超過等で保存に失敗しても、呼び出し元にはメモリ上の結果を返す
+    }
+  }
+  return loadAchievements();
+}
+
 export async function clearAchievements(): Promise<void> {
   if (typeof indexedDB === "undefined") return;
   try {

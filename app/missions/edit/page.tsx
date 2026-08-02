@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import Link from "next/link";
 import { AiDraft, AiMissionCandidate, Mission, MissionFormAnswers, Rarity } from "@/types/mission";
 import { getLocalUserId, loadMissions, saveAiDraft, saveMissions, resetMissions } from "@/lib/storage";
 import pageStyles from "../../page.module.css";
@@ -296,7 +295,6 @@ export default function EditMissionsPage() {
         <button type="button" className={styles.resetButton} onClick={handleReset}>
           デフォルトに戻す
         </button>
-        <Link href="/">ガチャに戻る</Link>
       </main>
 
       {toast && (
