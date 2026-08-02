@@ -25,9 +25,9 @@
   position: absolute;
   top: 48px;
   right: 0;
-  min-width: 180px;
+  min-width: 260px;
   margin: 0;
-  padding: 8px;
+  padding: 12px;
   list-style: none;
   border-radius: 8px;
   background: #ffffff;
@@ -49,6 +49,18 @@
   text-decoration: none;
   cursor: pointer;
   box-sizing: border-box;
+}
+
+.menuSection {
+  padding: 10px 0 0;
+  border-top: 1px solid #f1f1f1;
+}
+
+.sectionTitle {
+  margin: 0 0 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #5f7b8d;
 }
 
 .menuAction:hover {

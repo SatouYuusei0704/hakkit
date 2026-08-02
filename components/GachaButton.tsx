@@ -1,12 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import Image from "next/image";
 import { Mission, Rarity } from "@/types/mission";
 import MissionCard from "@/components/MissionCard";
 import RarityEffect from "@/components/RarityEffect";
 import { loadMissions } from "@/lib/storage";
 import styles from "./GachaButton.module.css";
+
+const raritySoundMap: Record<Rarity, string> = {
+  N: "/Rbgm.mp3",
+  R: "/Rbgm.mp3",
+  SR: "/SRbgm.mp3",
+};
 
 type Props = {
   mission: Mission | null;
@@ -25,6 +31,8 @@ export default function GachaButton({ mission, onResult }: Props) {
   const [rollIndex, setRollIndex] = useState(0);
   const [displayMission, setDisplayMission] = useState<Mission | null>(mission);
   const [dismissing, setDismissing] = useState(false);
+  const soundRef = useRef<HTMLAudioElement | null>(null);
+  const raritySoundRef = useRef<HTMLAudioElement | null>(null);
 
   if (mission === null && displayMission !== null && !dismissing) {
     // 親側（完了ボタンなど）から結果がクリアされたら、こちらの表示も追従する
@@ -34,6 +42,13 @@ export default function GachaButton({ mission, onResult }: Props) {
   async function handleClick() {
     setLoading(true);
     setBallRarity(null);
+
+    if (soundRef.current) {
+      soundRef.current.currentTime = 0;
+      void soundRef.current.play().catch(() => {
+        // 自動再生制限がある場合は無視
+      });
+    }
 
     if (displayMission) {
       setDismissing(true);
@@ -57,6 +72,16 @@ export default function GachaButton({ mission, onResult }: Props) {
     setDisplayMission(newMission);
     onResult(newMission);
 
+    if (raritySoundRef.current) {
+      const raritySound = raritySoundMap[newMission.rarity];
+      raritySoundRef.current.src = raritySound;
+      raritySoundRef.current.load();
+      raritySoundRef.current.currentTime = 0;
+      void raritySoundRef.current.play().catch(() => {
+        // 自動再生制限がある場合は無視
+      });
+    }
+
     setTimeout(() => setLoading(false), ANIM_TOTAL_MS - REVEAL_MS);
   }
 
@@ -79,6 +104,8 @@ export default function GachaButton({ mission, onResult }: Props) {
             disabled={loading}
             aria-label="ガチャを回す"
           />
+          <audio ref={soundRef} src="/gacha-roll.mp3" preload="auto" />
+          <audio ref={raritySoundRef} preload="auto" />
           {loading && !dismissing && !displayMission && (
             <div key={rollIndex} className={styles.ballFx} aria-hidden="true">
               <span className={styles.ballHalf} data-side="left" data-color={ballRarity ?? "neutral"} />
