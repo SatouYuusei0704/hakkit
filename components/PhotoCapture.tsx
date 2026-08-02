@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import styles from "./PhotoCapture.module.css";
 
 type Props = {
@@ -9,7 +9,8 @@ type Props = {
 };
 
 export default function PhotoCapture({ value, onChange }: Props) {
-  const previewUrl = useMemo(() => (value ? URL.createObjectURL(value) : null), [value]);
+  const [file, setFile] = useState(value);
+  const previewUrl = useMemo(() => (file ? URL.createObjectURL(file) : null), [file]);
 
   useEffect(() => {
     return () => {
@@ -18,7 +19,14 @@ export default function PhotoCapture({ value, onChange }: Props) {
   }, [previewUrl]);
 
   function handleFileChange(e: React.ChangeEvent<HTMLInputElement>) {
-    onChange(e.target.files?.[0] ?? null);
+    const selected = e.target.files?.[0] ?? null;
+    setFile(selected);
+    onChange(selected);
+  }
+
+  function handleRemove() {
+    setFile(null);
+    onChange(null);
   }
 
   return (
@@ -37,7 +45,7 @@ export default function PhotoCapture({ value, onChange }: Props) {
         <div className={styles.previewRow}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={previewUrl} alt="選択した写真のプレビュー" className={styles.preview} />
-          <button type="button" onClick={() => onChange(null)} className={styles.removeButton}>
+          <button type="button" onClick={handleRemove} className={styles.removeButton}>
             削除
           </button>
         </div>

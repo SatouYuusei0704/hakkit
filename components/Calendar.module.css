@@ -15,12 +15,14 @@
   border-radius: 6px;
   border: 1px solid #d0d0d0;
   background: transparent;
+  color: var(--text-primary, #333333);
   cursor: pointer;
   font-size: 1rem;
 }
 
 .monthLabel {
   font-weight: 600;
+  color: var(--text-primary, #333333);
 }
 
 .weekdays {
@@ -48,6 +50,7 @@
   border-radius: 8px;
   border: 1px solid transparent;
   background: transparent;
+  color: var(--text-primary, #333333);
   cursor: pointer;
   font-size: 0.85rem;
 }
@@ -76,17 +79,3 @@
   background: #e8905a;
 }
 
-@media (prefers-color-scheme: dark) {
-  .navButton {
-    border-color: #444;
-    color: #ededed;
-  }
-
-  .day {
-    color: #ededed;
-  }
-
-  .day:hover {
-    background: #262626;
-  }
-}

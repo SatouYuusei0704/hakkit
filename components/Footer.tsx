@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import styles from "./Footer.module.css";
 
 const navItems = [
@@ -38,17 +41,28 @@ const navItems = [
 ];
 
 export default function Footer() {
+  const pathname = usePathname();
+
   return (
     <footer className={styles.footer}>
       <nav className={styles.nav} aria-label="サイトナビゲーション">
-        {navItems.map((item) => (
-          <Link key={item.href} href={item.href} className={styles.link}>
-            <span aria-hidden="true" className={styles.icon}>
-              {item.icon}
-            </span>
-            <span className={styles.label}>{item.label}</span>
-          </Link>
-        ))}
+        {navItems.map((item) => {
+          const isActive = pathname === item.href;
+          return (
+            <Link
+              key={item.href}
+              href={item.href}
+              className={styles.link}
+              aria-current={isActive ? "page" : undefined}
+              data-active={isActive ? "" : undefined}
+            >
+              <span aria-hidden="true" className={styles.icon}>
+                {item.icon}
+              </span>
+              <span className={styles.label}>{item.label}</span>
+            </Link>
+          );
+        })}
       </nav>
     </footer>
   );

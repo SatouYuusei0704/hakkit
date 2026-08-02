@@ -37,13 +37,3 @@
   cursor: pointer;
 }
 
-@media (prefers-color-scheme: dark) {
-  .label {
-    color: #bbb;
-  }
-
-  .removeButton {
-    border-color: #444;
-    color: #ededed;
-  }
-}

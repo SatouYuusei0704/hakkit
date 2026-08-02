@@ -36,6 +36,14 @@
   background: rgba(79, 157, 251, 0.12);
 }
 
+.link[data-active] {
+  background: rgba(74, 122, 147, 0.14);
+}
+
+.link[data-active] .label {
+  color: #0f3554;
+}
+
 .icon {
   display: inline-flex;
   align-items: center;

@@ -12,6 +12,14 @@
   padding-bottom: 92px;
 }
 
+.gachaPage {
+  position: fixed;
+  inset: 0;
+  min-height: 0;
+  height: 100dvh;
+  overflow: hidden;
+}
+
 .main {
   display: flex;
   flex-direction: column;
@@ -75,13 +83,6 @@
 .skipButton:disabled {
   opacity: 0.6;
   cursor: not-allowed;
-}
-
-.achievementsLink {
-  color: #4a7a93;
-  font-size: 0.9rem;
-  text-decoration: underline;
-  text-underline-offset: 3px;
 }
 
 @media (max-width: 400px) {

@@ -13,8 +13,8 @@ export default function HamburgerMenu() {
     setShowConfirm(true);
   }
 
-  function confirmResetAchievements() {
-    clearAchievements();
+  async function confirmResetAchievements() {
+    await clearAchievements();
     window.dispatchEvent(new Event("achievements:changed"));
     setShowConfirm(false);
     setOpen(false);
@@ -40,11 +40,6 @@ export default function HamburgerMenu() {
           <li>
             <Link className={styles.menuAction} href="/missions/edit" onClick={() => setOpen(false)}>
               ガチャ内容を編集
-            </Link>
-          </li>
-          <li>
-            <Link className={styles.menuAction} href="/records" onClick={() => setOpen(false)}>
-              記録を見る
             </Link>
           </li>
           <li>

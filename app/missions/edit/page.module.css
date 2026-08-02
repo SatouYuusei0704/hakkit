@@ -77,14 +77,172 @@
   cursor: pointer;
 }
 
+.aiSection {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  padding: 16px;
+  border-radius: 10px;
+  border: 1px solid #d0d0d0;
+}
+
+.chipGroup {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 6px;
+}
+
+.chipGroupLabel {
+  font-size: 0.85rem;
+  color: #666;
+  margin-right: 4px;
+}
+
+.chip {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1px solid #d0d0d0;
+  background: transparent;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.chipSelected {
+  background: #171717;
+  color: white;
+  border-color: #171717;
+}
+
+.themeInput {
+  padding: 8px 12px;
+  border-radius: 6px;
+  border: 1px solid #d0d0d0;
+}
+
+.aiActions {
+  display: flex;
+  gap: 8px;
+}
+
+.aiActions button {
+  padding: 8px 16px;
+  border-radius: 6px;
+  border: none;
+  background: #171717;
+  color: white;
+  cursor: pointer;
+}
+
+.aiActions button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.aiError {
+  color: #b00020;
+  font-size: 0.9rem;
+}
+
+.candidateList {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.candidateCard {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  padding: 12px;
+  border-radius: 8px;
+  border: 1px solid #d0d0d0;
+}
+
+.candidateRarity {
+  font-weight: bold;
+}
+
+.candidateText {
+  margin: 0;
+}
+
+.candidateReason {
+  margin: 0;
+  font-size: 0.8rem;
+  color: #666;
+}
+
+.candidateCard button {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  background: #171717;
+  color: white;
+  cursor: pointer;
+}
+
+.aiEmpty {
+  color: #666;
+  font-size: 0.9rem;
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: 24px;
+  transform: translateX(-50%);
+  padding: 10px 20px;
+  border-radius: 8px;
+  background: #171717;
+  color: white;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+  z-index: 1000;
+  animation: toastIn 0.2s ease-out;
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 8px);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+}
+
 @media (prefers-color-scheme: dark) {
   .addForm input[type="text"],
   .addForm select,
   .item input[type="text"],
   .item select,
-  .resetButton {
+  .resetButton,
+  .aiSection,
+  .chip,
+  .themeInput,
+  .candidateCard {
     border-color: #444;
     background: #111;
     color: #ededed;
+  }
+
+  .chipGroupLabel,
+  .candidateReason,
+  .aiEmpty {
+    color: #aaa;
+  }
+
+  .chipSelected {
+    background: #ededed;
+    color: #111;
+    border-color: #ededed;
   }
 }

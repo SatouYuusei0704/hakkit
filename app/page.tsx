@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { Mission } from "@/types/mission";
 import { saveAchievement } from "@/lib/storage";
 import { savePhoto } from "@/lib/photos";
@@ -26,7 +25,7 @@ export default function Home() {
     if (photo) {
       await savePhoto(id, photo);
     }
-    saveAchievement({
+    await saveAchievement({
       id,
       missionId: target.id,
       missionText: target.text,
@@ -58,7 +57,7 @@ export default function Home() {
   }
 
   return (
-    <div className={styles.page}>
+    <div className={`${styles.page} ${styles.gachaPage}`}>
       <HamburgerMenu />
       <main className={styles.main}>
         <h1>マンネリ突破ガチャ</h1>
@@ -74,9 +73,6 @@ export default function Home() {
             </button>
           </div>
         )}
-        <Link className={styles.achievementsLink} href="/achievements">
-          実績を見る
-        </Link>
       </main>
 
       {showCamera && mission && (
