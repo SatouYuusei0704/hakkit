@@ -21,4 +21,5 @@ export type AchievementRecord = {
   missionText: string;
   rarity: Rarity;
   completedAt: string; // ISO 8601形式
+  hasPhoto?: boolean; // 写真本体はIndexedDBに保存し、このidで紐づける
 };

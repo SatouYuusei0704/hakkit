@@ -76,6 +76,23 @@ export function deleteAchievement(id: string): AchievementRecord[] {
   return updated;
 }
 
+export function updateAchievement(
+  id: string,
+  updates: Partial<Omit<AchievementRecord, "id">>
+): AchievementRecord[] {
+  const updated = loadAchievements().map((record) =>
+    record.id === id ? { ...record, ...updates } : record
+  );
+  if (typeof window === "undefined") return updated;
+
+  try {
+    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
+  } catch {
+    // 容量超過等で保存に失敗しても、呼び出し元にはメモリ上の結果を返す
+  }
+  return updated;
+}
+
 export function clearAchievements(): void {
   if (typeof window === "undefined") return;
   try {
