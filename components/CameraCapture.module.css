@@ -15,6 +15,10 @@
   object-fit: cover;
 }
 
+.mirrored {
+  transform: scaleX(-1);
+}
+
 .closeButton {
   position: absolute;
   top: 16px;
@@ -31,9 +35,24 @@
   cursor: pointer;
 }
 
+.switchButton {
+  position: absolute;
+  bottom: calc(96px + env(safe-area-inset-bottom, 0px));
+  right: 24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  font-size: 1.4rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
 .shutterButton {
   position: absolute;
-  bottom: 32px;
+  bottom: calc(88px + env(safe-area-inset-bottom, 0px));
   left: 50%;
   transform: translateX(-50%);
   width: 68px;

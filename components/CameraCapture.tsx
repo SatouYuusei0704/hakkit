@@ -12,12 +12,15 @@ export default function CameraCapture({ onCapture, onCancel }: Props) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const [error, setError] = useState(false);
+  const [facingMode, setFacingMode] = useState<"environment" | "user">("environment");
 
   useEffect(() => {
     let cancelled = false;
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setError(false);
 
     navigator.mediaDevices
-      .getUserMedia({ video: { facingMode: "environment" } })
+      .getUserMedia({ video: { facingMode } })
       .then((stream) => {
         if (cancelled) {
           stream.getTracks().forEach((track) => track.stop());
@@ -36,7 +39,11 @@ export default function CameraCapture({ onCapture, onCancel }: Props) {
       cancelled = true;
       streamRef.current?.getTracks().forEach((track) => track.stop());
     };
-  }, []);
+  }, [facingMode]);
+
+  function handleSwitchCamera() {
+    setFacingMode((prev) => (prev === "environment" ? "user" : "environment"));
+  }
 
   function handleShutter() {
     const video = videoRef.current;
@@ -85,7 +92,21 @@ export default function CameraCapture({ onCapture, onCancel }: Props) {
         </div>
       ) : (
         <>
-          <video ref={videoRef} autoPlay playsInline muted className={styles.video} />
+          <video
+            ref={videoRef}
+            autoPlay
+            playsInline
+            muted
+            className={`${styles.video} ${facingMode === "user" ? styles.mirrored : ""}`}
+          />
+          <button
+            type="button"
+            className={styles.switchButton}
+            onClick={handleSwitchCamera}
+            aria-label="カメラを切り替える"
+          >
+            🔄
+          </button>
           <button
             type="button"
             className={styles.shutterButton}
