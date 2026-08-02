@@ -37,10 +37,6 @@
   width: 100%;
 }
 
-.hiddenInput {
-  display: none;
-}
-
 .completeButton {
   padding: 10px 32px;
   min-height: 44px;

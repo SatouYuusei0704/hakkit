@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
 import { Mission } from "@/types/mission";
 import { saveAchievement } from "@/lib/storage";
@@ -8,12 +8,13 @@ import { savePhoto } from "@/lib/photos";
 import GachaButton from "@/components/GachaButton";
 import MissionCard from "@/components/MissionCard";
 import HamburgerMenu from "@/components/HamburgerMenu";
+import CameraCapture from "@/components/CameraCapture";
 import styles from "./page.module.css";
 
 export default function Home() {
   const [mission, setMission] = useState<Mission | null>(null);
   const [saving, setSaving] = useState(false);
-  const photoInputRef = useRef<HTMLInputElement>(null);
+  const [showCamera, setShowCamera] = useState(false);
 
   function handleResult(newMission: Mission) {
     setMission(newMission);
@@ -38,14 +39,17 @@ export default function Home() {
   }
 
   function handleTakePhoto() {
-    photoInputRef.current?.click();
+    setShowCamera(true);
   }
 
-  async function handlePhotoSelected(e: React.ChangeEvent<HTMLInputElement>) {
-    const file = e.target.files?.[0] ?? null;
-    e.target.value = "";
-    if (!mission || !file) return;
+  async function handleCameraCapture(file: File) {
+    setShowCamera(false);
+    if (!mission) return;
     await finishCompletion(mission, file);
+  }
+
+  function handleCameraCancel() {
+    setShowCamera(false);
   }
 
   async function handleSkipPhoto() {
@@ -62,14 +66,6 @@ export default function Home() {
         <GachaButton mission={mission} onResult={handleResult} />
         {mission && (
           <div className={styles.completeActions}>
-            <input
-              ref={photoInputRef}
-              type="file"
-              accept="image/*"
-              capture="environment"
-              className={styles.hiddenInput}
-              onChange={handlePhotoSelected}
-            />
             <button className={styles.completeButton} onClick={handleTakePhoto} disabled={saving}>
               写真を撮って完了
             </button>
@@ -82,6 +78,10 @@ export default function Home() {
           実績を見る
         </Link>
       </main>
+
+      {showCamera && mission && (
+        <CameraCapture onCapture={handleCameraCapture} onCancel={handleCameraCancel} />
+      )}
     </div>
   );
 }
