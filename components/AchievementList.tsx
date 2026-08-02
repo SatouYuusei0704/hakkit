@@ -12,9 +12,11 @@ export default function AchievementList() {
   const [records, setRecords] = useState<AchievementRecord[]>([]);
 
   useEffect(() => {
-    // localStorageはサーバーに存在しないため、マウント後に読み込む
-    // eslint-disable-next-line react-hooks/set-state-in-effect
-    setRecords(loadAchievements());
+    // IndexedDBはサーバーに存在しないため、マウント後に読み込む
+    (async () => {
+      const loaded = await loadAchievements();
+      setRecords(loaded);
+    })();
   }, []);
 
   const summary = summarizeAchievements(records);

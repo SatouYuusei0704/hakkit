@@ -9,24 +9,42 @@
   justify-content: center;
   font-family: var(--font-geist-sans);
   background: linear-gradient(180deg, var(--gacha-bg-top) 0%, var(--gacha-bg-bottom) 100%);
+  padding-bottom: 92px;
+}
+
+.gachaPage {
+  position: fixed;
+  inset: 0;
+  min-height: 0;
+  height: 100dvh;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .main {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 24px;
+  gap: clamp(10px, 2.5dvh, 24px);
   width: 100%;
   max-width: 480px;
-  padding: 48px 24px;
+  padding: clamp(16px, 4dvh, 48px) 24px;
   color: var(--text-primary);
 }
 
 .main h1 {
-  font-size: 1.5rem;
+  font-size: clamp(1.1rem, 4.5dvh, 1.5rem);
   font-weight: 800;
   text-align: center;
   letter-spacing: 0.02em;
+}
+
+.completeActions {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
 }
 
 .completeButton {
@@ -50,11 +68,22 @@
   cursor: not-allowed;
 }
 
-.achievementsLink {
-  color: #4a7a93;
-  font-size: 0.9rem;
+.skipButton {
+  padding: 8px 24px;
+  min-height: 40px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: #888;
+  font-size: 0.85rem;
+  cursor: pointer;
   text-decoration: underline;
   text-underline-offset: 3px;
+}
+
+.skipButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
 
 @media (max-width: 400px) {

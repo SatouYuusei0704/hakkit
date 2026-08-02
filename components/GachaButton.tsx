@@ -59,10 +59,11 @@ export default function GachaButton({ mission, onResult }: Props) {
 
     setRollIndex((i) => i + 1);
 
+    const missions = await loadMissions();
     const fetchPromise = fetch("/api/gacha", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ missions: loadMissions() }),
+      body: JSON.stringify({ missions }),
     }).then((res) => res.json());
     const revealTimer = new Promise<void>((resolve) => setTimeout(resolve, REVEAL_MS));
     const [data] = await Promise.all([fetchPromise, revealTimer]);

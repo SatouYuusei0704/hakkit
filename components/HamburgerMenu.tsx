@@ -13,8 +13,8 @@ export default function HamburgerMenu() {
     setShowConfirm(true);
   }
 
-  function confirmResetAchievements() {
-    clearAchievements();
+  async function confirmResetAchievements() {
+    await clearAchievements();
     window.dispatchEvent(new Event("achievements:changed"));
     setShowConfirm(false);
     setOpen(false);
