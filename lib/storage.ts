@@ -1,9 +1,91 @@
-import { AchievementRecord, Mission, Rarity } from "@/types/mission";
+import { openDB, type DBSchema, type IDBPDatabase } from "idb";
+import {
+  AchievementRecord,
+  AiDraft,
+  Mission,
+  Rarity,
+  StoredAchievementRecord,
+  StoredMission,
+} from "@/types/mission";
 import { missions as defaultMissions } from "@/data/missions";
 
-const STORAGE_KEY = "hakkit:achievements";
-const MISSIONS_STORAGE_KEY = "hakkit:custom-missions";
+const DB_NAME = "hakkitDB";
+const DB_VERSION = 1;
+const LOCAL_USER_ID_KEY = "localUserId";
 const RARITIES: Rarity[] = ["N", "R", "SR"];
+
+interface MetaRecord {
+  key: string;
+  value: string;
+}
+
+// IndexedDBのgetAll()はkeyPath(id)順で返り挿入順を保らないため、
+// 表示順を復元できるよう保存時の並び位置を明示的に持たせる
+type MissionRecord = StoredMission & { order: number };
+
+interface HakkitDB extends DBSchema {
+  meta: {
+    key: string;
+    value: MetaRecord;
+  };
+  missions: {
+    key: string;
+    value: MissionRecord;
+    indexes: { userId: string; rarity: string };
+  };
+  achievements: {
+    key: string;
+    value: StoredAchievementRecord;
+    indexes: { userId: string; completedAt: string; missionId: string };
+  };
+  aiDrafts: {
+    key: string;
+    value: AiDraft;
+    indexes: { userId: string; createdAt: string };
+  };
+}
+
+let dbPromise: Promise<IDBPDatabase<HakkitDB>> | null = null;
+
+function getDB(): Promise<IDBPDatabase<HakkitDB>> {
+  if (!dbPromise) {
+    dbPromise = openDB<HakkitDB>(DB_NAME, DB_VERSION, {
+      upgrade(db) {
+        if (!db.objectStoreNames.contains("meta")) {
+          db.createObjectStore("meta", { keyPath: "key" });
+        }
+        if (!db.objectStoreNames.contains("missions")) {
+          const store = db.createObjectStore("missions", { keyPath: "id" });
+          store.createIndex("userId", "userId");
+          store.createIndex("rarity", "rarity");
+        }
+        if (!db.objectStoreNames.contains("achievements")) {
+          const store = db.createObjectStore("achievements", { keyPath: "id" });
+          store.createIndex("userId", "userId");
+          store.createIndex("completedAt", "completedAt");
+          store.createIndex("missionId", "missionId");
+        }
+        if (!db.objectStoreNames.contains("aiDrafts")) {
+          const store = db.createObjectStore("aiDrafts", { keyPath: "id" });
+          store.createIndex("userId", "userId");
+          store.createIndex("createdAt", "createdAt");
+        }
+      },
+    });
+  }
+  return dbPromise;
+}
+
+// 将来ログイン機能を追加する際に、このIDをサーバー側アカウントへ紐付ける移行パスとして温存する
+export async function getLocalUserId(): Promise<string> {
+  const db = await getDB();
+  const existing = await db.get("meta", LOCAL_USER_ID_KEY);
+  if (existing) return existing.value;
+
+  const id = crypto.randomUUID();
+  await db.put("meta", { key: LOCAL_USER_ID_KEY, value: id });
+  return id;
+}
 
 export function isMission(value: unknown): value is Mission {
   if (typeof value !== "object" || value === null) return false;
@@ -30,76 +112,14 @@ function isAchievementRecord(value: unknown): value is AchievementRecord {
   );
 }
 
-export function loadAchievements(): AchievementRecord[] {
-  if (typeof window === "undefined") return [];
-
-  let raw: string | null;
-  try {
-    raw = window.localStorage.getItem(STORAGE_KEY);
-  } catch {
-    // プライベートブラウジング等でlocalStorageにアクセスできない場合
-    return [];
-  }
-  if (!raw) return [];
+export async function loadMissions(): Promise<Mission[]> {
+  if (typeof indexedDB === "undefined") return defaultMissions;
 
   try {
-    const parsed: unknown = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return [];
-    // 手動編集や旧スキーマ由来の不正なレコードは除外する
-    return parsed.filter(isAchievementRecord);
-  } catch {
-    return [];
-  }
-}
-
-export function saveAchievement(record: AchievementRecord): AchievementRecord[] {
-  const updated = [...loadAchievements(), record];
-  if (typeof window === "undefined") return updated;
-
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-  } catch {
-    // 容量超過等で保存に失敗しても、呼び出し元にはメモリ上の結果を返す
-  }
-  return updated;
-}
-
-export function deleteAchievement(id: string): AchievementRecord[] {
-  const updated = loadAchievements().filter((record) => record.id !== id);
-  if (typeof window === "undefined") return updated;
-
-  try {
-    window.localStorage.setItem(STORAGE_KEY, JSON.stringify(updated));
-  } catch {
-    // 容量超過等で保存に失敗しても、呼び出し元にはメモリ上の結果を返す
-  }
-  return updated;
-}
-
-export function clearAchievements(): void {
-  if (typeof window === "undefined") return;
-  try {
-    window.localStorage.removeItem(STORAGE_KEY);
-  } catch {
-    // no-op
-  }
-}
-
-export function loadMissions(): Mission[] {
-  if (typeof window === "undefined") return defaultMissions;
-
-  let raw: string | null;
-  try {
-    raw = window.localStorage.getItem(MISSIONS_STORAGE_KEY);
-  } catch {
-    return defaultMissions;
-  }
-  if (!raw) return defaultMissions;
-
-  try {
-    const parsed: unknown = JSON.parse(raw);
-    if (!Array.isArray(parsed)) return defaultMissions;
-    const valid = parsed.filter(isMission);
+    const db = await getDB();
+    const stored = await db.getAll("missions");
+    const sorted = [...stored].sort((a, b) => a.order - b.order);
+    const valid = sorted.filter(isMission);
     // 保存されているカスタムミッションが全て不正な場合はデフォルトにフォールバックする
     return valid.length > 0 ? valid : defaultMissions;
   } catch {
@@ -107,24 +127,115 @@ export function loadMissions(): Mission[] {
   }
 }
 
-export function saveMissions(missions: Mission[]): Mission[] {
-  if (typeof window === "undefined") return missions;
+export async function saveMissions(missions: Mission[]): Promise<Mission[]> {
+  if (typeof indexedDB === "undefined") return missions;
 
   try {
-    window.localStorage.setItem(MISSIONS_STORAGE_KEY, JSON.stringify(missions));
+    const db = await getDB();
+    const userId = await getLocalUserId();
+    const existing = await db.getAll("missions");
+    const existingById = new Map(existing.map((m) => [m.id, m]));
+    const now = new Date().toISOString();
+
+    const tx = db.transaction("missions", "readwrite");
+    await tx.store.clear();
+    await Promise.all(
+      missions.map((mission, order) => {
+        const prev = existingById.get(mission.id);
+        const stored: MissionRecord = {
+          ...mission,
+          userId,
+          source: prev?.source ?? "manual",
+          createdAt: prev?.createdAt ?? now,
+          order,
+        };
+        return tx.store.put(stored);
+      })
+    );
+    await tx.done;
   } catch {
     // 容量超過等で保存に失敗しても、呼び出し元にはメモリ上の結果を返す
   }
   return missions;
 }
 
-export function resetMissions(): Mission[] {
-  if (typeof window === "undefined") return defaultMissions;
+export async function resetMissions(): Promise<Mission[]> {
+  if (typeof indexedDB === "undefined") return defaultMissions;
 
   try {
-    window.localStorage.removeItem(MISSIONS_STORAGE_KEY);
+    const db = await getDB();
+    await db.clear("missions");
   } catch {
     // no-op
   }
   return defaultMissions;
+}
+
+export async function loadAchievements(): Promise<AchievementRecord[]> {
+  if (typeof indexedDB === "undefined") return [];
+
+  try {
+    const db = await getDB();
+    const stored = await db.getAll("achievements");
+    // 手動編集や旧スキーマ由来の不正なレコードは除外する
+    return stored.filter(isAchievementRecord);
+  } catch {
+    return [];
+  }
+}
+
+export async function saveAchievement(record: AchievementRecord): Promise<AchievementRecord[]> {
+  if (typeof indexedDB === "undefined") return [...(await loadAchievements()), record];
+
+  try {
+    const db = await getDB();
+    const userId = await getLocalUserId();
+    const stored: StoredAchievementRecord = { ...record, userId };
+    await db.put("achievements", stored);
+  } catch {
+    // 容量超過等で保存に失敗しても、呼び出し元にはメモリ上の結果を返す
+  }
+  return loadAchievements();
+}
+
+export async function deleteAchievement(id: string): Promise<AchievementRecord[]> {
+  if (typeof indexedDB !== "undefined") {
+    try {
+      const db = await getDB();
+      await db.delete("achievements", id);
+    } catch {
+      // 容量超過等で保存に失敗しても、呼び出し元にはメモリ上の結果を返す
+    }
+  }
+  return (await loadAchievements()).filter((record) => record.id !== id);
+}
+
+export async function clearAchievements(): Promise<void> {
+  if (typeof indexedDB === "undefined") return;
+  try {
+    const db = await getDB();
+    await db.clear("achievements");
+  } catch {
+    // no-op
+  }
+}
+
+export async function saveAiDraft(draft: AiDraft): Promise<void> {
+  if (typeof indexedDB === "undefined") return;
+  try {
+    const db = await getDB();
+    await db.put("aiDrafts", draft);
+  } catch {
+    // no-op
+  }
+}
+
+export async function loadAiDrafts(): Promise<AiDraft[]> {
+  if (typeof indexedDB === "undefined") return [];
+  try {
+    const db = await getDB();
+    return await db.getAll("aiDrafts");
+  } catch {
+    return [];
+  }
 }

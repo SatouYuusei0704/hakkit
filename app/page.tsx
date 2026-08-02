@@ -18,9 +18,9 @@ export default function Home() {
     setCompleted(false);
   }
 
-  function handleComplete() {
+  async function handleComplete() {
     if (!mission) return;
-    saveAchievement({
+    await saveAchievement({
       id: crypto.randomUUID(),
       missionId: mission.id,
       missionText: mission.text,
