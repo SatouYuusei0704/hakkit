@@ -1,0 +1,49 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+.label {
+  font-size: 0.85rem;
+  color: #555;
+}
+
+.input {
+  display: block;
+  margin-top: 4px;
+  font-size: 0.85rem;
+}
+
+.previewRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.preview {
+  width: 96px;
+  height: 96px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.removeButton {
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: 1px solid #d0d0d0;
+  background: transparent;
+  cursor: pointer;
+}
+
+@media (prefers-color-scheme: dark) {
+  .label {
+    color: #bbb;
+  }
+
+  .removeButton {
+    border-color: #444;
+    color: #ededed;
+  }
+}
