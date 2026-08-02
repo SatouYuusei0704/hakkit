@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { Mission } from "@/types/mission";
 import { saveAchievement } from "@/lib/storage";
 import { savePhoto } from "@/lib/photos";
@@ -60,7 +61,14 @@ export default function Home() {
     <div className={`${styles.page} ${styles.gachaPage}`}>
       <HamburgerMenu />
       <main className={styles.main}>
-        <h1>マンネリ突破ガチャ</h1>
+        <Image
+          src="/logo.png"
+          alt="Gachaly"
+          width={2000}
+          height={1091}
+          priority
+          className={styles.logo}
+        />
         {!mission && <MissionCard mission={null} />}
         <GachaButton mission={mission} onResult={handleResult} />
         {mission && (

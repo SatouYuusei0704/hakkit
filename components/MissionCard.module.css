@@ -1,8 +1,8 @@
 .card {
   min-width: 280px;
-  min-height: 140px;
+  min-height: clamp(56px, 9dvh, 110px);
   border-radius: 22px;
-  padding: 24px;
+  padding: clamp(10px, 2dvh, 20px);
   display: flex;
   flex-direction: column;
   align-items: center;

@@ -81,7 +81,7 @@ function buildPrompt(input: ValidatedRequest): string {
       : "";
   const themeLine = input.theme ? `\nテーマ: ${input.theme}` : "";
 
-  return `あなたは大学生向けの「マンネリ突破ガチャ」アプリのミッション作家です。
+  return `あなたは大学生向けの「Gachaly」アプリのミッション作家です。
 大学生が休み時間・空き時間に気軽に挑戦できる、20〜40文字程度の一言ミッションを日本語で3件提案してください。
 
 条件:
