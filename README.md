@@ -30,7 +30,7 @@ Gachalyは、「何をすればいいか分からない」という日常のち�
 
 ## デモ
 
-- 発表資料URL：[未定]
+- 発表資料URL：https://www.canva.com/design/DAHRHDeSSPc/mgW0_--NtatDxCWptKyL_g/view?utm_content=DAHRHDeSSPc&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=hea6aa94403
 - デモURL：https://hakkit-production.up.railway.app/
 
 ### デモ動画
