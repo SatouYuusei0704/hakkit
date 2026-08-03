@@ -4,14 +4,11 @@ import { useEffect, useMemo, useState } from "react";
 import { AchievementRecord } from "@/types/mission";
 import { loadAchievements, updateAchievement } from "@/lib/storage";
 import { savePhoto, deletePhoto } from "@/lib/photos";
+import { toLocalDateKey } from "@/lib/date";
 import Calendar from "@/components/Calendar";
 import RecordPhoto from "@/components/RecordPhoto";
 import PhotoCapture from "@/components/PhotoCapture";
 import styles from "./page.module.css";
-
-function toDateKey(iso: string): string {
-  return iso.slice(0, 10);
-}
 
 export default function RecordsPage() {
   const [records, setRecords] = useState<AchievementRecord[]>([]);
@@ -28,7 +25,7 @@ export default function RecordsPage() {
   const recordsByDate = useMemo(() => {
     const map = new Map<string, AchievementRecord[]>();
     for (const record of records) {
-      const key = toDateKey(record.completedAt);
+      const key = toLocalDateKey(record.completedAt);
       const list = map.get(key) ?? [];
       list.push(record);
       map.set(key, list);
