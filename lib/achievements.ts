@@ -1,4 +1,5 @@
 import { AchievementRecord, Rarity } from "@/types/mission";
+import { toLocalDateKey } from "@/lib/date";
 
 const RARITIES: Rarity[] = ["N", "R", "SR"];
 
@@ -92,7 +93,7 @@ function calculateStreakDays(records: AchievementRecord[]): number {
   if (records.length === 0) return 0;
 
   const uniqueDays = Array.from(
-    new Set(records.map((r) => r.completedAt.slice(0, 10)))
+    new Set(records.map((r) => toLocalDateKey(r.completedAt)))
   ).sort()
     .reverse();
 
@@ -100,7 +101,7 @@ function calculateStreakDays(records: AchievementRecord[]): number {
   const cursor = new Date();
 
   for (const day of uniqueDays) {
-    const expected = cursor.toISOString().slice(0, 10);
+    const expected = toLocalDateKey(cursor);
     if (day !== expected) break;
     streak += 1;
     cursor.setDate(cursor.getDate() - 1);
